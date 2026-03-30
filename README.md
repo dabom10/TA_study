@@ -19,5 +19,5 @@ troubleshooting/
 
 | 날짜 | 분류 | 문제 요약 | 파일 |
 |------|------|-----------|------|
-| 2026-03-30 | env | NVIDIA 드라이버 설치 후 HDMI 외장 모니터 블랙스크린 | [nvidia-hdmi-troubleshooting.md](env/nvidia-hdmi-troubleshooting.md) |
+| 2026-03-30 | env | NVIDIA 드라이버 설치 후 HDMI 외장 모니터 블랙스크린 | [nvidia_hdmi_troubleshooting.md](env/nvidia_hdmi_troubleshooting.md) |
 | 2026-03-30 | tips | apt vs apt-get 차이 | [apt-vs-apt-get.md](tips/apt-vs-apt-get.md) |
