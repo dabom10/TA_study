@@ -10,7 +10,8 @@ TA_study/
 ├── env/        # 환경 세팅 (Ubuntu, ROS2, CUDA 등)
 ├── hardware/   # 하드웨어 (로봇, 카메라, 센서)
 ├── software/   # 코드/패키지 에러
-└── network/    # 네트워크/통신
+├── network/    # 네트워크/통신
+└── tips/       # 유용한 명령어 및 팁
 ```
 
 ---
@@ -21,3 +22,4 @@ TA_study/
 |------|------|-----------|------|
 | 2026-03-30 | env | NVIDIA 드라이버 설치 후 HDMI 외장 모니터 블랙스크린 | [nvidia_hdmi_troubleshooting.md](env/nvidia_hdmi_troubleshooting.md) |
 | 2026-03-30 | tips | apt vs apt-get 차이 | [apt-vs-apt-get.md](tips/apt-vs-apt-get.md) |
+| 2026-03-31 | tips | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](tips/command.md) |
