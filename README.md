@@ -1,11 +1,11 @@
-# Troubleshooting Notes
+# TA_study notes
 
-TA 업무 중 발생한 문제와 해결 방법을 기록합니다.
+TA 업무 중 발생한 문제와 해결 방법, 알게 된 정보들을 기록합니다.
 
 ## 디렉토리 구조
 
 ```
-troubleshooting/
+TA_study/
 ├── README.md
 ├── env/        # 환경 세팅 (Ubuntu, ROS2, CUDA 등)
 ├── hardware/   # 하드웨어 (로봇, 카메라, 센서)
