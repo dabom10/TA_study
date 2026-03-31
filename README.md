@@ -24,3 +24,4 @@ TA_study/
 | 2026-03-30 | tips | apt vs apt-get 차이 | [apt-vs-apt-get.md](tips/apt-vs-apt-get.md) |
 | 2026-03-31 | tips | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](tips/command.md) |
 | 2026-03-31 | network | configure_discovery.sh 실행 시 아무 동작 없이 종료 (인터넷 차단 네트워크에서 wget 실패) | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
+| 2026-03-31 | tips | TurtleBot4 Discovery Server TUI와 setup.bash 설정 일치 방법 | [TUI_discovery_N_setup_bash.py](tips/TUI_discovery_N_setup_bash.py) |
