@@ -26,3 +26,4 @@ TA_study/
 | 2026-03-31 | tips | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](tips/turtlebot4_tui_and_setup_bash_guide.md) |
 | 2026-03-31 | network | configure_discovery.sh 실행 시 아무 동작 없이 종료 (인터넷 차단 네트워크에서 wget 실패) | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
 | 2026-03-31 | software | TurtleBot4 Discovery Server Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](software/TUI_discovery_N_setup_bash.md) |
+| 2026-04-01 | tips | rosdep install 명령어 옵션 및 apt 개념 정리 | [rosdep_and_apt.md](tips/rosdep_and_apt.md) |
