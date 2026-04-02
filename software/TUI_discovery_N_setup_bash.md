@@ -26,6 +26,27 @@ rokey@rokey:~$ ros2 topic list
 
 ---
 
+## Discovery Server 구조
+
+| 쪽 | 역할 | 내용 |
+|------|------|------|
+| **터틀봇** | 서버 실행 | `fastdds discovery -i 0 -p 11811` 자동 실행 |
+| **PC** | 클라이언트 | `ROS_DISCOVERY_SERVER` 환경변수로 접속 대상 지정 |
+
+터틀봇 TUI(`turtlebot4-setup`)에서 Discovery Server 항목을 **true**로 설정하면,
+설정이 `/etc/turtlebot4/` 아래 파일에 저장되고 부팅/적용 시 아래 명령이 자동 실행됨:
+
+```
+fastdds discovery -i 0 -p 11811
+```
+
+- `-i 0` : 서버 ID = 0
+- `-p 11811` : 대기 포트
+
+`ROS_DISCOVERY_SERVER`는 **PC(클라이언트) 쪽에 설정**하는 변수로, 서버를 여는 게 아니라 "어디로 접속할지"를 지정하는 것.
+
+---
+
 ## 원인
 
 `ROS_DISCOVERY_SERVER` 환경변수의 서버 ID가 터틀봇에서 실행 중인 Discovery Server ID와 불일치.
