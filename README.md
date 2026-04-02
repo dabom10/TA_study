@@ -31,3 +31,4 @@ TA_study/
 | 2026-04-01 | tips | ROS2 패키지 생성 명령어 및 옵션 정리 | [ros2_package_create.md](tips/ros2_package_create.md) |
 | 2026-04-02 | env | GNOME에서 IBus 한글 전환 안 됨 (Super+Space로 해결) | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
 | 2026-04-02 | tips | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](tips/ros2_message_type_and_interface.md) |
+| 2026-04-02 | tips | ROS2 Bag 개념, 용도, 토픽별 역할 및 기본 명령어 정리 | [ros2_bag_concept.md](tips/ros2_bag_concept.md) |
