@@ -29,3 +29,4 @@ TA_study/
 | 2026-04-01 | tips | rosdep install 명령어 옵션 및 apt 개념 정리 | [rosdep_and_apt.md](tips/rosdep_and_apt.md) |
 | 2026-04-01 | tips | colcon build 후 디렉토리 구조 및 source, PATH 개념 정리 | [colcon_build_workspace.md](tips/colcon_build_workspace.md) |
 | 2026-04-01 | tips | ROS2 패키지 생성 명령어 및 옵션 정리 | [ros2_package_create.md](tips/ros2_package_create.md) |
+| 2026-04-02 | env | GNOME에서 IBus 한글 전환 안 됨 (Super+Space로 해결) | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
