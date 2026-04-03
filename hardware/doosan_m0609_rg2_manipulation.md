@@ -64,7 +64,42 @@
 - 속도 제한값을 코드로 강제하지 않으면 수강생/운용자가 임의로 해제할 수 있으므로 **감시 로직도 함께 구현**하는 것이 권장됨
 - 관련 파라미터: `vel`, `acc` (두산 패키지 이동 함수의 속도/가속도 인자)
 
-### 4. 싱귤러리티 (Singularity)
+### 4. 야코비안 행렬 (Jacobian Matrix)
+
+#### 개념
+
+다변수 벡터 함수 $\mathbf{f}: \mathbb{R}^n \to \mathbb{R}^m$ 의 **편미분 전체를 모아놓은 행렬**:
+
+$$J = \frac{\partial \mathbf{f}}{\partial \mathbf{x}} = \begin{bmatrix} \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} \end{bmatrix}$$
+
+#### 로보틱스에서의 역할
+
+로봇 팔에서 야코비안은 **관절 공간(joint space) → 작업 공간(task space)의 속도 변환 행렬**이다.
+
+```
+ẋ = J(q) · q̇
+```
+
+- `q̇`: 관절 속도 벡터 (입력)
+- `ẋ`: 끝단(end-effector) 속도 벡터 (출력)
+- `J(q)`: 현재 관절 자세 q에서의 야코비안
+
+| 용도 | 수식 | 의미 |
+|------|------|------|
+| 순기구학 속도 | `ẋ = J·q̇` | 관절 속도 → 끝단 속도 |
+| 역기구학 속도 | `q̇ = J⁻¹·ẋ` (또는 pseudo-inverse) | 끝단 속도 → 관절 속도 |
+| 힘-토크 변환 | `τ = Jᵀ·F` | 끝단 힘 → 관절 토크 |
+
+#### 왜 이름이 "야코비안/자코비안"?
+
+수학자 **Carl Gustav Jacob Jacobi** (독일)의 이름에서 유래.
+- 독일어/원어 발음: **야코비** → 야코비안
+- 영어 발음: **Jacobian** → 자코비안
+- 한국 로보틱스 현장에서는 **자코비안**을 더 많이 사용하지만 둘 다 맞음
+
+---
+
+### 5. 싱귤러리티 (Singularity)
 
 #### 개념
 
