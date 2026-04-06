@@ -35,3 +35,4 @@ TA_study/
 | 2026-04-03 | hardware | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 (TCP offset, 싱귤러리티, 패키지 개발) | [doosan_m0609_rg2_manipulation.md](hardware/doosan_m0609_rg2_manipulation.md) |
 | 2026-04-03 | network | TurtleBot4 5기 강의 변경사항 (Lifecycle Recovery, FastDDS vs CycloneDDS, 네트워크 이슈) | [turtlebot4_lecture_5th_updates.md](network/turtlebot4_lecture_5th_updates.md) |
 | 2026-04-03 | tips | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) 및 ROS2와의 관계 | [serial_communication_types.md](tips/serial_communication_types.md) |
+| 2026-04-06 | tips | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](tips/slam_lidar_ogm_costmap.md) |
