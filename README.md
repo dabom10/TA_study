@@ -37,3 +37,5 @@ TA_study/
 | 2026-04-03 | concepts | TurtleBot4 5기 강의 변경사항 (Lifecycle Recovery, FastDDS vs CycloneDDS, 네트워크 이슈) | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
 | 2026-04-03 | concepts | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) 및 ROS2와의 관계 | [serial_communication_types.md](concepts/serial_communication_types.md) |
 | 2026-04-06 | concepts | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](concepts/slam_lidar_ogm_costmap.md) |
+| 2026-04-06 | concepts | ROS2 통신 개념: Topic/Service/Action, 동기/비동기, QoS, 리매핑, map_saver_cli | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
+| 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
