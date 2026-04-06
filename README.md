@@ -14,8 +14,7 @@ TA_study/
 ├── hardware/         # 하드웨어 에러 (로봇, 카메라, 센서)
 ├── software/         # 코드/패키지 에러
 ├── network/          # 네트워크/통신 에러
-├── tips/             # 짧은 명령어, 단축키, 빠른 레퍼런스
-└── concepts/         # 개념 정리, 학습 내용, 지식 노트
+└── concepts/         # 개념 정리, 학습 내용, 명령어 레퍼런스, 지식 노트
     └── turtlebot4_manual/   # TurtleBot4 User Manual 스터디
         ├── setup/
         ├── software/
@@ -33,7 +32,7 @@ TA_study/
 |------|------|-----------|------|
 | 2026-03-30 | env | NVIDIA 드라이버 설치 후 HDMI 외장 모니터 블랙스크린 | [nvidia_hdmi_troubleshooting.md](env/nvidia_hdmi_troubleshooting.md) |
 | 2026-03-30 | concepts | apt vs apt-get 차이 | [apt-vs-apt-get.md](concepts/apt-vs-apt-get.md) |
-| 2026-03-31 | tips | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](tips/command.md) |
+| 2026-03-31 | concepts | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](concepts/command.md) |
 | 2026-03-31 | concepts | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](concepts/turtlebot4_tui_and_setup_bash_guide.md) |
 | 2026-03-31 | network | configure_discovery.sh 실행 시 아무 동작 없이 종료 (인터넷 차단 네트워크에서 wget 실패) | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
 | 2026-03-31 | network | TurtleBot4 Discovery Server Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
