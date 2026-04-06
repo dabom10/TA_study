@@ -50,6 +50,7 @@ TA_study/
 | 2026-04-06 | concepts | ROS2 통신 개념: Topic/Service/Action, 동기/비동기, QoS, 리매핑, map_saver_cli | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
 | 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
 | 2026-04-06 | concepts | Create3 comm LED는 WiFi 연결 상태, Discovery Server 구성에서 off가 정상 | [turtlebot4_create3_comm_led_network.md](concepts/turtlebot4_create3_comm_led_network.md) |
+| 2026-04-06 | concepts | slam_toolbox 노드-토픽 관계 실습 검증 (node info, topic info, rqt_graph) | [slam_toolbox_node_topic_verification.md](concepts/slam_toolbox_node_topic_verification.md) |
 
 ---
 
