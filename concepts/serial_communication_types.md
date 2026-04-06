@@ -39,7 +39,7 @@
 | **UART** | 비동기 | 2선 (TX, RX) | 저~중 | 가장 기본, 1:1 통신, 별도 클럭 선 없음 |
 | **SPI** | 동기 | 4선 (MOSI, MISO, SCK, CS) | 고속 | 마스터-슬레이브, 전이중(full-duplex) |
 | **I2C** | 동기 | 2선 (SDA, SCL) | 저~중 | 다중 슬레이브 가능, 주소로 구분 |
-| **USB** | 동기 | 4선 이상 | 고속 | 플러그앤플레이, PC와 임베디드 연결에 흔함 |
+| **USB** | 복합 (별도 계층) | 4선 이상 | 고속 | 플러그앤플레이, PC와 임베디드 연결에 흔함 |
 | **CAN** | 비동기 | 2선 (CAN-H, CAN-L) | 중 | 차량/산업용, 노이즈에 강함, 다중 노드 |
 | **RS-232** | 비동기 | 다수 | 저 | 구형 산업용, 장거리 약함 |
 | **RS-485** | 비동기 | 2선 (차동) | 중 | 산업용 장거리, 노이즈 강함, 최대 1.2km |
@@ -76,10 +76,12 @@ Device A: RX ──────────────── TX :Device B
 
 ### USB (Universal Serial Bus)
 
-- 내부적으로는 시리얼 통신이지만 프로토콜이 복잡하게 추상화됨
+- SPI/I2C처럼 클럭을 공유하는 방식이 아님 → 단순히 "동기/비동기"로 분류 불가
+- control / bulk / interrupt / isochronous 네 가지 전송 방식을 가지는 별도 계층
 - 플러그앤플레이, 핫스왑 지원
 - 임베디드 보드에서 USB-to-UART 변환 칩(CH340, FT232 등)을 통해 PC와 연결하는 경우 많음
-- **TurtleBot4**: Create3 ↔ RPi4를 USB-C로 연결 → 내부적으로 USB 시리얼 통신
+- **TurtleBot4**: Create3 ↔ RPi4를 USB-C로 연결 → **Ethernet over USB** 방식으로 IP 통신  
+  (Create3는 `192.168.10.1:8080`으로 webserver 노출 → "시리얼" 아닌 네트워크 통신)
 
 ### CAN (Controller Area Network)
 
@@ -102,6 +104,8 @@ Device A: RX ──────────────── TX :Device B
 
 ## 참고
 
-- TurtleBot4 Create3 ↔ RPi4: USB serial → ROS2 bridge (micro-ROS 또는 iRobot 전용 브릿지)
-- micro-ROS: 마이크로컨트롤러에서 ROS2 노드를 구동하는 경량 프레임워크
+- TurtleBot4 Create3 ↔ RPi4: USB-C → **Ethernet over USB** → ROS2 토픽/서비스 (IP 네트워크 기반)
+  - Create3는 ROS2를 직접 실행하는 플랫폼 (마이크로컨트롤러가 아님)
+  - micro-ROS 미사용 (micro-ROS는 MCU 같은 마이크로컨트롤러 전용 경량 프레임워크)
+  - `create3_republisher` 노드가 Create3 토픽을 RPi 네임스페이스로 재발행
 - rosserial: 시리얼 통신 위에 ROS 메시지를 전송하는 패키지 (ROS1 주력, ROS2는 micro-ROS 권장)

@@ -104,21 +104,22 @@ Unconfigured → [configure] → Inactive → [activate] → Active
 ### 5. 펌웨어 ↔ Raspberry Pi 4 시리얼 통신
 
 - **Create3 펌웨어** (iRobot 전용 마이크로컨트롤러)와 **RPi4** 사이의 통신
-- **물리 연결**: USB-C 케이블 → 내부적으로 USB 시리얼 통신
+- **물리 연결**: USB-C 케이블 → **Ethernet over USB** (IP 네트워크, 시리얼이 아님)
 - **레이어 구조**:
 
 ```
 [ ROS2 토픽/서비스 ]   ← 미들웨어 (소프트웨어 레이어)
          ↓
-[ USB 시리얼 통신  ]   ← 물리 전송 레이어 (하드웨어)
+[ Ethernet over USB ]  ← 물리 전송 레이어 (USB-C, IP 네트워크)
          ↓
-[ Create3 펌웨어   ]   ← 하드웨어 (모터, 센서 제어)
+[ Create3 플랫폼   ]   ← ROS2 직접 실행 (마이크로컨트롤러 아님)
 ```
 
-- **시리얼 통신 ≠ ROS2 통신이 완전히 분리된 것이 아님**
-  - 시리얼이 ROS2를 대체하는 게 아니라, 시리얼 위에 ROS2 데이터를 얹는 구조
-  - Create3는 USB를 통해 RPi4와 ROS2 토픽을 주고받음 (iRobot 전용 브릿지 사용)
-- 시리얼 통신 종류 및 개념 → [serial_communication_types.md](../tips/serial_communication_types.md) 참고
+- **핵심**:
+  - Create3는 ROS2를 직접 실행하는 플랫폼 → micro-ROS 미사용
+  - USB-C 연결 후 Create3는 `192.168.10.1:8080` webserver 노출 → IP 기반 통신 증거
+  - `create3_republisher` 노드가 Create3 토픽을 RPi 네임스페이스로 재발행
+- 시리얼 통신 종류 및 개념 → [serial_communication_types.md](serial_communication_types.md) 참고
 
 ---
 
