@@ -73,6 +73,83 @@ OGM을 가져와서 **"로봇이 여기를 지나가면 얼마나 위험한가"*
 
 ---
 
+## SLAM 실행 → 맵 파일 생성 흐름
+
+### 전체 흐름
+
+```
+1. SLAM 노드 실행
+        ↓
+2. 로봇 센서 데이터 수집
+   /robot8/scan  (LiDAR)  ─┐
+   /robot8/odom  (바퀴)   ─┼→ slam_toolbox
+   /robot8/imu   (관성)   ─┘
+        ↓
+3. slam_toolbox가 /robot8/map 토픽에 OccupancyGrid publish
+   (Transient Local QoS — 마지막 맵 보존)
+        ↓
+4. Undock → teleop으로 돌아다니며 맵 확장
+   (이동할수록 미탐색 영역이 채워짐)
+        ↓
+5. map_saver_cli 실행 → /robot8/map 토픽 수신
+        ↓
+6. 파일 저장
+   first_map.yaml  (메타데이터)
+   first_map.pgm   (흑백 이미지)
+```
+
+### 각 단계 상세
+
+#### 1단계: SLAM 노드 실행
+```bash
+ros2 launch turtlebot4_navigation slam.launch.py namespace:=/robot8
+```
+이 시점부터 `/robot8/map` 토픽 생성됨.
+
+#### 2단계: slam_toolbox 내부 처리
+```
+scan 데이터 수신
+  → 이전 scan과 비교해서 로봇 위치 추정 (scan matching)
+  → odom으로 초기 위치 예측, scan으로 보정
+  → 루프 클로저: 이미 지나간 곳 다시 방문 시 오차 누적 보정
+  → OccupancyGrid 업데이트 후 /map 토픽 publish
+```
+
+#### 4단계: teleop으로 맵 확장
+```
+처음: 로봇 주변만 탐색 (작은 맵)
+이동 후: [회색 미탐색] → [흰/검 탐색 완료]
+```
+
+#### 5단계: map_saver_cli
+```bash
+ros2 run nav2_map_server map_saver_cli -f "first_map" \
+  --ros-args -p map_subscribe_transient_local:=true -r __ns:=/robot8
+```
+- Transient Local QoS로 구독 → 이미 발행된 최신 맵도 수신 가능
+- `/robot8/map` 한 번 받아서 파일로 변환
+
+#### 6단계: 생성 파일
+
+**`first_map.yaml`** — 맵 메타데이터
+```yaml
+image: first_map.pgm
+resolution: 0.05           # 1픽셀 = 5cm
+origin: [-1.23, -2.34, 0]  # 맵 원점 (실제 좌표)
+occupied_thresh: 0.65      # 이 값 이상이면 장애물
+free_thresh: 0.25          # 이 값 이하면 빈 공간
+```
+
+**`first_map.pgm`** — 실제 지도 이미지
+```
+흰색 = 빈 공간 (0)
+검은색 = 장애물 (100)
+회색 = 미탐색 (-1)
+```
+두 파일은 항상 같은 디렉토리에 있어야 함 (yaml이 pgm을 참조).
+
+---
+
 ## 참고
 
 - ROS2 Nav2: `nav2_costmap_2d` 패키지가 OGM을 받아 costmap 생성
