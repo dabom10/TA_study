@@ -32,7 +32,7 @@ TA_study/
 | 2026-04-02 | env | GNOME에서 IBus 한글 전환 안 됨 (Super+Space로 해결) | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
 | 2026-04-02 | tips | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](tips/ros2_message_type_and_interface.md) |
 | 2026-04-02 | tips | ROS2 Bag 개념, 용도, 토픽별 역할 및 기본 명령어 정리 | [ros2_bag_concept.md](tips/ros2_bag_concept.md) |
-| 2026-04-03 | hardware | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 (TCP offset, 싱귤러리티, 패키지 개발) | [doosan_m0609_rg2_manipulation.md](hardware/doosan_m0609_rg2_manipulation.md) |
-| 2026-04-03 | network | TurtleBot4 5기 강의 변경사항 (Lifecycle Recovery, FastDDS vs CycloneDDS, 네트워크 이슈) | [turtlebot4_lecture_5th_updates.md](network/turtlebot4_lecture_5th_updates.md) |
+| 2026-04-03 | tips | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 (TCP offset, 싱귤러리티, 패키지 개발) | [doosan_m0609_rg2_manipulation.md](tips/doosan_m0609_rg2_manipulation.md) |
+| 2026-04-03 | tips | TurtleBot4 5기 강의 변경사항 (Lifecycle Recovery, FastDDS vs CycloneDDS, 네트워크 이슈) | [turtlebot4_lecture_5th_updates.md](tips/turtlebot4_lecture_5th_updates.md) |
 | 2026-04-03 | tips | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) 및 ROS2와의 관계 | [serial_communication_types.md](tips/serial_communication_types.md) |
 | 2026-04-06 | tips | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](tips/slam_lidar_ogm_costmap.md) |
