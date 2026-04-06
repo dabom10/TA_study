@@ -36,10 +36,10 @@ TA_study/
 | 2026-03-31 | tips | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](tips/command.md) |
 | 2026-03-31 | concepts | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](concepts/turtlebot4_tui_and_setup_bash_guide.md) |
 | 2026-03-31 | network | configure_discovery.sh 실행 시 아무 동작 없이 종료 (인터넷 차단 네트워크에서 wget 실패) | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
-| 2026-03-31 | software | TurtleBot4 Discovery Server Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](software/TUI_discovery_N_setup_bash.md) |
-| 2026-04-01 | tips | rosdep install 명령어 옵션 및 apt 개념 정리 | [rosdep_and_apt.md](tips/rosdep_and_apt.md) |
+| 2026-03-31 | network | TurtleBot4 Discovery Server Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
+| 2026-04-01 | concepts | rosdep install 명령어 옵션 및 apt 개념 정리 | [rosdep_and_apt.md](concepts/rosdep_and_apt.md) |
 | 2026-04-01 | concepts | colcon build 후 디렉토리 구조 및 source, PATH 개념 정리 | [colcon_build_workspace.md](concepts/colcon_build_workspace.md) |
-| 2026-04-01 | tips | ROS2 패키지 생성 명령어 및 옵션 정리 | [ros2_package_create.md](tips/ros2_package_create.md) |
+| 2026-04-01 | concepts | ROS2 패키지 생성 명령어 및 옵션 정리 | [ros2_package_create.md](concepts/ros2_package_create.md) |
 | 2026-04-02 | env | GNOME에서 IBus 한글 전환 안 됨 (Super+Space로 해결) | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
 | 2026-04-02 | concepts | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](concepts/ros2_message_type_and_interface.md) |
 | 2026-04-02 | concepts | ROS2 Bag 개념, 용도, 토픽별 역할 및 기본 명령어 정리 | [ros2_bag_concept.md](concepts/ros2_bag_concept.md) |
