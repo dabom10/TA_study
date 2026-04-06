@@ -7,6 +7,7 @@
 | OS | Ubuntu 22.04 |
 | ROS2 | Humble |
 | 로봇 | Turtlebot4 (Create3 + Raspberry Pi 4) |
+| 네트워크 구성 | Discovery Server |
 
 ---
 
@@ -18,21 +19,35 @@ Create3의 comm LED가 꺼진 상태에서도 `ros2 topic list`에 robot8의 토
 
 ## 원인
 
-### Turtlebot4 통신 구조
+### Turtlebot4 네트워크 구성: Discovery Server
 
 ```
-[Create3] ---USB-C (comm LED)--- [Raspberry Pi]
-    |                                   |
-    +-------WiFi 직접 연결---------[공유기]---[PC]
+[Create3] ---USB-C--- [Raspberry Pi (Discovery Server)] ---WiFi--- [PC]
 ```
 
-Create3는 **두 가지 통신 경로**를 가진다:
-1. RPi와의 USB-C 연결 (comm LED가 나타내는 것)
-2. WiFi 직접 연결 (공유기에 독립적으로 접속)
+Discovery Server 구성에서 Create3는 **WiFi에 직접 연결할 필요가 없다.**  
+모든 통신은 USB-C로 연결된 RPi를 통해 중계된다.
 
-**comm LED = USB-C 연결 상태**, WiFi 연결 상태가 아님.
+### comm LED의 의미
 
-따라서 comm LED가 꺼져 있어도 Create3는 WiFi를 통해 DDS 브로드캐스트를 계속 보내며, `ros2 topic list`에 정상적으로 나타난다.
+**comm LED off = Create3가 WiFi에 연결되지 않은 상태**
+
+Discovery Server 구성에서는 이것이 **정상 동작**이다.  
+Create3는 WiFi 없이 USB-C를 통해 RPi와 통신하고, RPi가 discovery server로서 모든 토픽을 네트워크에 브로드캐스트한다.
+
+따라서 comm LED가 꺼져 있어도 `ros2 topic list`에 Create3의 토픽이 정상적으로 나타난다.
+
+---
+
+## Simple Discovery vs Discovery Server 비교
+
+| 구분 | Simple Discovery | Discovery Server |
+|------|-----------------|-----------------|
+| Create3 WiFi 필요 여부 | **필요** | **불필요** |
+| comm LED | on이어야 정상 | off가 정상 |
+| 통신 경로 | Create3, RPi 각각 WiFi 직접 연결 | Create3 → USB-C → RPi → WiFi → PC |
+| 권장 환경 | 1~2대, 단순 기능 | 다중 로봇, 복잡한 기능 (Navigation 등) |
+| 지원 DDS | CycloneDDS, FastDDS | FastDDS only |
 
 ---
 
@@ -43,22 +58,10 @@ Create3는 **두 가지 통신 경로**를 가진다:
 - `daemon stop` → 캐시 삭제 → robot8 토픽 사라짐
 - `daemon start` → **즉시** robot8 토픽 나타남
 
-즉시 나타나는 것은 캐시가 아니라 **DDS가 실시간으로 Create3를 재발견**했다는 증거.  
-Create3가 WiFi로 살아있기 때문에 가능한 것.
-
----
-
-## topic list는 보이는데 echo 데이터가 없는 경우
-
-topic list(DDS discovery)와 실제 데이터 수신은 별개 문제.  
-데이터가 안 오는 원인:
-- DDS QoS 불일치
-- 멀티캐스트 설정 문제
-- 해당 시점에 노드가 실제로 publish하지 않는 상태
+즉시 나타나는 것은 RPi의 discovery server가 살아있어 DDS discovery가 실시간으로 이루어지기 때문이다.
 
 ---
 
 ## 참고
 
-- Create3 공식 문서: USB-C는 RPi와의 내부 통신용, WiFi는 별도 연결
-- `ros2 daemon stop && ros2 topic list` → 캐시인지 실시간인지 구분 가능
+- [Turtlebot4 Networking 공식 문서](https://turtlebot.github.io/turtlebot4-user-manual/setup/networking.html)
