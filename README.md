@@ -39,3 +39,4 @@ TA_study/
 | 2026-04-06 | concepts | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](concepts/slam_lidar_ogm_costmap.md) |
 | 2026-04-06 | concepts | ROS2 통신 개념: Topic/Service/Action, 동기/비동기, QoS, 리매핑, map_saver_cli | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
 | 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
+| 2026-04-06 | concepts | Create3 comm LED는 USB 연결 상태, WiFi 직접 연결로 topic list는 정상 출력 | [turtlebot4_create3_comm_led_network.md](concepts/turtlebot4_create3_comm_led_network.md) |
