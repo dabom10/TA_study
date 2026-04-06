@@ -261,6 +261,16 @@ RViz가 로봇 3D 모델 그릴 때 사용.
 
 ## 8. SLAM (slam_toolbox 실행 후 추가)
 
+> **slam_toolbox 입력 구조 (중요)**
+> - 직접 subscribe: `/scan` (LaserScan)
+> - TF tree에서 읽음: `odom → base_link` 변환
+> - `/odom`, `/imu` 토픽은 slam_toolbox가 직접 구독하지 않음
+> - Create3 펌웨어가 바퀴 엔코더 + IMU를 내부 계산 → /odom 발행 + tf 업데이트
+>
+> slam_toolbox가 publish하는 tf:
+> - `map → odom` 변환 (scan 보정으로 누적 오차 얼마나 수정했는지)
+> - Create3는 `odom → base_link` 담당, slam_toolbox는 `map → odom` 담당
+
 ### `/robot8/map`
 타입: `nav_msgs/msg/OccupancyGrid`
 ```
@@ -286,8 +296,14 @@ pose:
 covariance: [...]   # 위치 불확실도
 ```
 
-### `/robot8/slam_toolbox/feedback`
-SLAM 내부 처리 상태 (루프 클로저 발생 등).
+### `/robot8/slam_toolbox/loop_closure_event`
+루프 클로저 발생 시 publish. 오차 보정 후 pose graph 최적화 완료 알림.
+
+### `/robot8/slam_toolbox/new_node_event`
+새 pose graph 노드가 추가될 때마다 publish. 노드 ID + 엣지 정보 포함.
+
+### `/robot8/slam_toolbox/pose_graph`
+전체 pose graph. 루프 클로저 발생 시에만 publish.
 
 ### `/robot8/slam_toolbox/graph_visualization`
 pose graph — 로봇이 지나온 경로와 노드 연결 구조. RViz 시각화용.

@@ -81,9 +81,17 @@ OGM을 가져와서 **"로봇이 여기를 지나가면 얼마나 위험한가"*
 1. SLAM 노드 실행
         ↓
 2. 로봇 센서 데이터 수집
-   /robot8/scan  (LiDAR)  ─┐
-   /robot8/odom  (바퀴)   ─┼→ slam_toolbox
-   /robot8/imu   (관성)   ─┘
+
+   [Create3 내부]
+   바퀴 엔코더 + IMU → 펌웨어가 내부 계산
+     → /robot8/odom 토픽 publish
+     → tf (odom → base_link) publish  ← slam_toolbox가 여기서 읽음
+
+   [slam_toolbox가 직접 구독하는 것]
+   /robot8/scan  (LiDAR)  → 직접 subscribe
+   tf (odom → base_link)  → TF tree에서 읽음
+
+   ※ /odom, /imu 토픽은 slam_toolbox가 직접 구독하지 않음
         ↓
 3. slam_toolbox가 /robot8/map 토픽에 OccupancyGrid publish
    (Transient Local QoS — 마지막 맵 보존)
@@ -108,11 +116,13 @@ ros2 launch turtlebot4_navigation slam.launch.py namespace:=/robot8
 
 #### 2단계: slam_toolbox 내부 처리
 ```
-scan 데이터 수신
-  → 이전 scan과 비교해서 로봇 위치 추정 (scan matching)
-  → odom으로 초기 위치 예측, scan으로 보정
+/scan 수신
+  → TF(odom → base_link)로 로봇의 현재 예측 위치 파악
+  → 예측 위치 기반으로 scan matching → 정확한 위치 보정
   → 루프 클로저: 이미 지나간 곳 다시 방문 시 오차 누적 보정
   → OccupancyGrid 업데이트 후 /map 토픽 publish
+  → 보정된 위치를 /pose 로 publish
+  → map → odom 변환을 tf로 publish (오차 보정량 반영)
 ```
 
 #### 4단계: teleop으로 맵 확장
