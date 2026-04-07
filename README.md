@@ -47,6 +47,7 @@ TA_study/
 | 2026-04-03 | concepts | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) 및 ROS2와의 관계 | [serial_communication_types.md](concepts/serial_communication_types.md) |
 | 2026-04-06 | concepts | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](concepts/slam_lidar_ogm_costmap.md) |
 | 2026-04-06 | concepts | ROS2 통신 개념: Topic/Service/Action, 동기/비동기, QoS, 리매핑, map_saver_cli | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
+| 2026-04-07 | concepts | Loop Detection vs Loop Closure 개념, Scan/Pointcloud 방식 비교, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
 | 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
 | 2026-04-06 | concepts | Create3 comm LED는 WiFi 연결 상태, Discovery Server 구성에서 off가 정상 | [turtlebot4_create3_comm_led_network.md](concepts/turtlebot4_create3_comm_led_network.md) |
 | 2026-04-06 | concepts | slam_toolbox 노드-토픽 관계 실습 검증 (node info, topic info, rqt_graph) | [slam_toolbox_node_topic_verification.md](concepts/slam_toolbox_node_topic_verification.md) |
