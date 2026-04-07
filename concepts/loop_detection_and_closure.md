@@ -151,6 +151,41 @@ loop_search_space_smear_deviation: 0.03
 
 ---
 
+## Scan Degeneracy: 직선 도로에서 SLAM이 실패하는 이유
+
+직선 도로나 긴 복도에서 SLAM이 실패하는 것은 **loop detection 문제가 아니라 front-end scan matching 문제**가 근본 원인이다.
+
+### 1방향 Degeneracy (One-directional Degeneracy)
+
+```
+로봇 진행 방향 →
+
+|  스캔A  |  스캔B  |  스캔C  |
+ 벽과의 거리는 동일, 진행 방향 정보 없음
+```
+
+ICP/scan matching은 두 스캔의 차이를 최소화하는 transform을 찾는다.  
+직선 환경에서는 진행 방향(x축)으로 아무리 이동해도 스캔이 동일 → 최적화 문제가 해당 방향으로 **ill-conditioned** (구속조건 부족).
+
+### 두 문제의 관계
+
+| 문제 | SLAM 단계 | 원인 |
+|------|-----------|------|
+| 진행 방향 위치 추정 불가 | **Front-end** (scan matching) | 1방향 degeneracy |
+| 원위치 복귀 인식 실패 | Back-end (loop detection) | 모든 스캔이 동일하게 생겨 구분 불가 |
+
+Loop detection 실패는 **2차 결과**다. Loop detection이 성공해도 front-end가 이미 쌓은 드리프트를 완전히 교정하기 어렵다.
+
+### 대응 방법
+
+- IMU, wheel encoder 등 추가 센서로 진행 방향 구속조건 보완
+- 3D LiDAR 사용 시 수직 방향 특징점으로 일부 보완 가능
+- 최근 연구: eigenvalue 분석으로 degeneracy 방향 감지 후 해당 축 가중치 조정 (GenZ-ICP, DALI-SLAM 등)
+
+> 검증: [Anti-Degeneracy Scheme for Lidar SLAM](https://arxiv.org/html/2502.11486), [LiDAR SLAM in Featureless Tunnel](https://www.mdpi.com/2079-9292/12/4/1002) — "one-directional degeneracy in corridor-like structures", front-end 문제임 확인
+
+---
+
 ## 다른 개념과의 연결
 
 - [SLAM & OGM 기본](slam_lidar_ogm_costmap.md): Loop Detection이 SLAM 프레임워크 내 어디에 위치하는지
