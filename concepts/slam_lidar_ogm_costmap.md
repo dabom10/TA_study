@@ -32,6 +32,50 @@ LiDAR → Front-end → Back-end → Loop Detection → Global Grid Map
 
 ---
 
+## SLAM 구성 요소 심화: 각 정보 흐름의 의미
+
+### Pose Information (Front-end → Loop Detection)
+
+Front-end는 연속 스캔 간 scan matching으로 현재 pose(x, y, θ)를 추정한다.  
+이 **Pose Information**을 Loop Detection에 보내는 이유: 탐색 범위를 좁히기 위해.  
+현재 위치를 모르면 과거 전체 그래프를 탐색해야 하지만, 알면 "반경 Xm 이내 subgraph만" 검색 가능.
+
+### Pose Graph & Subgraph (Back-end)
+
+Back-end는 Front-end의 pose 시퀀스를 **Pose Graph**로 관리한다.
+
+```
+노드 = 각 시점의 로봇 pose
+엣지 = 노드 간 상대 변환 + 불확실도 (odometry에서 획득)
+
+[pose0] --odom→ [pose1] --odom→ [pose2] --odom→ [pose3]
+```
+
+이 그래프를 공간적으로 묶은 것이 **Subgraph** (로컬로 일관성 있는 지도 조각).  
+**Subgraph Information**은 Loop Detection이 과거 위치를 검색할 때 쓰는 DB.
+
+### Map Optimization (Loop Detection → Global Grid Map)
+
+Loop Detection이 루프를 확인하면 **loop edge**가 pose graph에 추가된다.
+
+```
+[pose0] --odom→ [pose1] --odom→ ... --odom→ [pose10]
+   └─────────────── loop edge ───────────────────┘
+```
+
+Graph Optimization(SLAM Toolbox: Ceres Solver + Levenberg-Marquardt)이  
+모든 edge constraint를 최대한 만족하는 pose 집합을 계산 → 오차가 전체 경로에 분산.  
+보정된 pose로 Global Grid Map(OGM)을 재구성.
+
+```
+최적화 전: 오차가 경로 끝에 집중
+최적화 후: 오차가 전체에 분산 흡수 → 지도가 닫힘
+```
+
+> 검증: [Graph SLAM: Theory to Implementation](https://federicosarrocco.com/blog/graph-slam-tutorial), [LiDAR/Visual SLAM Backend with Loop Closure](https://www.mdpi.com/2072-4292/13/14/2720) — front-end/back-end 역할 분리, subgraph 개념 일치
+
+---
+
 ## OGM (Occupancy Grid Map) vs Costmap
 
 ### OGM — 원본 지도
