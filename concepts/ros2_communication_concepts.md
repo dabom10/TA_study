@@ -225,3 +225,47 @@ free_thresh: 0.25          # 이 값 이하면 빈 공간
 ```bash
 ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=<map_name>.yaml
 ```
+
+---
+
+## ROS2 Bag
+
+**특정 시점의 토픽 데이터를 통째로 녹화해뒀다가 나중에 똑같이 재발행하는 파일.**  
+"그 순간의 로봇 세계를 얼려둔 것" — 알고리즘은 실제 로봇 데이터인지 bag인지 구분하지 못한다.
+
+### 핵심 용도: 로봇 없이 개발/테스트
+
+```
+1. 로봇으로 한 번 주행하며 bag 녹화
+2. 이후 ros2 bag play 만 실행
+3. 카메라, IMU, odom 등이 그 순간 그대로 재발행
+```
+
+| 상황 | bag 없이 | bag 있으면 |
+|------|----------|------------|
+| 알고리즘 반복 테스트 | 매번 로봇 주행 필요 | `ros2 bag play` 한 번 |
+| 환경 재현 | 불가능 | 동일 데이터로 항상 재현 |
+| 디버깅 | 실시간만 가능 | 원하는 구간 반복 재생 |
+
+### 주의사항
+
+- bag에 `cmd_vel`이 포함되면 **로봇이 실제로 움직임**
+- 센서 데이터만 재생하려면 `--topics`로 선택
+
+### 기본 명령어
+
+```bash
+# 녹화
+ros2 bag record -o <저장경로> <토픽1> <토픽2> ...
+ros2 bag record -o <저장경로> -a        # 전체 토픽
+
+# 재생
+ros2 bag play <bag경로>
+ros2 bag play <bag명> --topics /robot8/scan /robot8/odom   # 특정 토픽만
+ros2 bag play <bag명> --rate 0.5                           # 0.5배속
+
+# 정보 확인
+ros2 bag info <bag경로>
+```
+
+**파일 포맷:** sqlite3 (`.db3`) 또는 MCAP + `metadata.yaml` (토픽 목록, 메시지 수 등)

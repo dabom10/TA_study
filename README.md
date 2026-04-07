@@ -28,30 +28,25 @@ TA_study/
 
 ## 문제 목록
 
-| 날짜 | 분류 | 문제 요약 | 파일 |
-|------|------|-----------|------|
+| 날짜 | 분류 | 내용 | 파일 |
+|------|------|------|------|
 | 2026-03-30 | env | NVIDIA 드라이버 설치 후 HDMI 외장 모니터 블랙스크린 | [nvidia_hdmi_troubleshooting.md](env/nvidia_hdmi_troubleshooting.md) |
-| 2026-03-30 | concepts | apt vs apt-get 차이 | [apt-vs-apt-get.md](concepts/apt-vs-apt-get.md) |
+| 2026-03-31 | env | GNOME IBus 한글 전환 안 됨 | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
+| 2026-03-31 | network | configure_discovery.sh 인터넷 차단 환경에서 wget 실패 | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
+| 2026-03-31 | network | TurtleBot4 Discovery Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
 | 2026-03-31 | concepts | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](concepts/command.md) |
 | 2026-03-31 | concepts | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](concepts/turtlebot4_tui_and_setup_bash_guide.md) |
-| 2026-03-31 | network | configure_discovery.sh 실행 시 아무 동작 없이 종료 (인터넷 차단 네트워크에서 wget 실패) | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
-| 2026-03-31 | network | TurtleBot4 Discovery Server Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
-| 2026-04-01 | concepts | rosdep install 명령어 옵션 및 apt 개념 정리 | [rosdep_and_apt.md](concepts/rosdep_and_apt.md) |
-| 2026-04-01 | concepts | colcon build 후 디렉토리 구조 및 source, PATH 개념 정리 | [colcon_build_workspace.md](concepts/colcon_build_workspace.md) |
-| 2026-04-01 | concepts | ROS2 패키지 생성 명령어 및 옵션 정리 | [ros2_package_create.md](concepts/ros2_package_create.md) |
-| 2026-04-02 | env | GNOME에서 IBus 한글 전환 안 됨 (Super+Space로 해결) | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
+| 2026-04-01 | concepts | rosdep/apt 개념, apt vs apt-get 차이 | [rosdep_and_apt.md](concepts/rosdep_and_apt.md) |
+| 2026-04-01 | concepts | ROS2 패키지 생성, colcon build, source/PATH 개념 | [ros2_workspace_and_package.md](concepts/ros2_workspace_and_package.md) |
 | 2026-04-02 | concepts | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](concepts/ros2_message_type_and_interface.md) |
-| 2026-04-02 | concepts | ROS2 Bag 개념, 용도, 토픽별 역할 및 기본 명령어 정리 | [ros2_bag_concept.md](concepts/ros2_bag_concept.md) |
-| 2026-04-03 | concepts | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 (TCP offset, 싱귤러리티, 패키지 개발) | [doosan_m0609_rg2_manipulation.md](concepts/doosan_m0609_rg2_manipulation.md) |
-| 2026-04-03 | concepts | TurtleBot4 5기 강의 변경사항 (Lifecycle Recovery, FastDDS vs CycloneDDS, 네트워크 이슈) | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
-| 2026-04-03 | concepts | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) 및 ROS2와의 관계 | [serial_communication_types.md](concepts/serial_communication_types.md) |
-| 2026-04-06 | concepts | SLAM 개념 정리: 2D LiDAR Framework 및 OGM vs Costmap 비교 | [slam_lidar_ogm_costmap.md](concepts/slam_lidar_ogm_costmap.md) |
-| 2026-04-06 | concepts | ROS2 통신 개념: Topic/Service/Action, 동기/비동기, QoS, 리매핑, map_saver_cli | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
-| 2026-04-07 | concepts | Loop Detection vs Loop Closure 개념, Scan/Pointcloud 방식 비교, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
-| 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
-| 2026-04-06 | concepts | Create3 comm LED는 WiFi 연결 상태, Discovery Server 구성에서 off가 정상 | [turtlebot4_create3_comm_led_network.md](concepts/turtlebot4_create3_comm_led_network.md) |
-| 2026-04-06 | concepts | slam_toolbox 노드-토픽 관계 실습 검증 (node info, topic info, rqt_graph) | [slam_toolbox_node_topic_verification.md](concepts/slam_toolbox_node_topic_verification.md) |
-| 2026-04-07 | concepts | 미니프로젝트 사전 로봇 셋업 체크리스트 (싱글로봇 전환, Discovery Server, teleop/nav 검증) | [mini_project_robot_setup_checklist.md](concepts/mini_project_robot_setup_checklist.md) |
+| 2026-04-02 | concepts | ROS2 통신 개념: Topic/Service/Action, QoS, 리매핑, Bag | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
+| 2026-04-03 | concepts | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 | [doosan_m0609_rg2_manipulation.md](concepts/doosan_m0609_rg2_manipulation.md) |
+| 2026-04-03 | concepts | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) | [serial_communication_types.md](concepts/serial_communication_types.md) |
+| 2026-04-03 | concepts | TurtleBot4 강의 변경사항, FastDDS/CycloneDDS, Create3 comm LED | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
+| 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
+| 2026-04-06 | concepts | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
+| 2026-04-07 | concepts | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
+| 2026-04-07 | concepts | 미니프로젝트 사전 로봇 셋업 체크리스트 | [mini_project_robot_setup_checklist.md](concepts/mini_project_robot_setup_checklist.md) |
 
 ---
 

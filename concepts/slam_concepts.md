@@ -210,3 +210,87 @@ free_thresh: 0.25          # 이 값 이하면 빈 공간
 - ROS2 Nav2: `nav2_costmap_2d` 패키지가 OGM을 받아 costmap 생성
 - global costmap: 전체 지도 기반 장기 경로 계획
 - local costmap: 센서 실시간 데이터 기반 장애물 회피
+
+---
+
+## slam_toolbox 노드-토픽 구조
+
+### 개념 구조
+
+```
+slam.launch.py
+  └─ sync=true(기본) → sync_slam_toolbox_node
+     sync=false       → async_slam_toolbox_node
+     (둘 다 노드명은 /slam_toolbox 으로 동일)
+```
+
+| | sync | async |
+|--|------|-------|
+| 방식 | 모든 스캔 순서대로 처리 | 여유 있을 때만 처리 |
+| 우선순위 | 지도 정확도 | 실시간 성능 |
+| 용도 | 오프라인/정밀 매핑 | 실시간 주행 중 매핑 |
+
+> 검증: [slam_toolbox ROS2 Humble 문서](https://docs.ros.org/en/humble/p/slam_toolbox/)
+
+### 노드 Pub/Sub
+
+```
+Subscribers:
+  /robot8/scan:   sensor_msgs/msg/LaserScan       ← LiDAR 데이터
+  /robot8/map:    nav_msgs/msg/OccupancyGrid       ← localization 모드 대비 (mapping 모드에선 유휴)
+
+Publishers:
+  /robot8/map:          nav_msgs/msg/OccupancyGrid
+  /robot8/map_metadata: nav_msgs/msg/MapMetaData
+  /robot8/pose:         geometry_msgs/msg/PoseWithCovarianceStamped
+  /robot8/tf:           tf2_msgs/msg/TFMessage
+
+Services:
+  /robot8/slam_toolbox/save_map
+  /robot8/slam_toolbox/serialize_map
+  /robot8/slam_toolbox/pause_new_measurements
+  /robot8/slam_toolbox/toggle_interactive_mode
+```
+
+**/map을 pub/sub 둘 다 하는 이유:** mapping 모드와 localization 모드를 같은 코드가 지원. mapping 모드에서는 /map subscription이 열려있지만 실제로 소비하지 않음.
+
+> 검증: [Nav2 Mapping and Localization](https://docs.nav2.org/setup_guides/sensors/mapping_localization.html)
+
+### OccupancyGrid 메시지 구조
+
+```
+float32 resolution   # 셀 하나의 크기 (m). 예: 0.05 = 5cm/셀
+uint32 width, height
+geometry_msgs/Pose origin  # 지도 (0,0)이 실제 세계 어느 좌표인지
+int8[] data          # 1차원 배열 (index = y * width + x)
+  0   → free / -1 → unknown / 1~100 → occupied (확률적 표현)
+```
+
+> 검증: [nav_msgs/msg/OccupancyGrid](https://docs.ros.org/en/ros2_packages/humble/api/nav_msgs/msg/OccupancyGrid.html) — "values are application dependent"
+
+### 중복 노드 WARNING 원인
+
+```
+WARNING: Be aware that there are nodes in the graph that share an exact name
+```
+
+RPi가 wlan0(WiFi)와 usb0(USB ethernet) 두 인터페이스로 DDS 광고 → PC DDS가 같은 노드를 두 경로로 수신 → 중복 표시. 실제로 노드가 2개인 게 아니며 기능 문제 없음.
+
+> 검증: [create3_docs DDS discussion](https://github.com/iRobotEducation/create3_docs/discussions/17)
+
+### remappings가 필요한 이유
+
+slam_toolbox 기본 토픽명은 전역 경로(`/scan`, `/map`).  
+`PushRosNamespace(robot8)` + remappings → `/robot8/scan`, `/robot8/map`으로 변환.
+
+### 핵심 디버깅 명령어
+
+```bash
+ros2 node list
+ros2 node info /robot8/slam_toolbox      # 노드 기준: pub/sub/service 목록
+ros2 topic info /robot8/map              # 토픽 기준: 누가 pub/sub 하나
+ros2 topic echo /robot8/map --once
+ros2 interface show nav_msgs/msg/OccupancyGrid
+rqt_graph                                # 전체 노드-토픽 그래프
+ros2 pkg prefix turtlebot4_navigation    # 패키지 설치 경로
+```

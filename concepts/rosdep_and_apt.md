@@ -158,3 +158,19 @@ my_package/
 - `package.xml`의 `<depend>` 태그에 의존성을 명시해야 rosdep이 인식
 - `rosdep`은 apt의 래퍼(wrapper) 역할을 함
 - 빌드(`colcon build`) 결과물은 `build/`, `install/` 폴더 안의 바이너리/라이브러리 파일들
+
+---
+
+## apt vs apt-get
+
+| 항목 | `apt` | `apt-get` |
+|------|-------|-----------|
+| 출시 | 2014년 (신) | 구버전 |
+| 대상 | 사람이 직접 사용 | 스크립트/자동화 |
+| 진행률 바 | ✅ | ❌ |
+| 출력 안정성 | 버전마다 바뀔 수 있음 | 일정하게 유지됨 |
+
+`apt`는 `apt-get` + `apt-cache` 등 여러 명령어를 합친 사용자 친화적 버전. 기능 자체는 동일하며 둘 다 `/etc/apt/sources.list`를 참조한다.
+
+- **터미널에서 직접** → `apt`
+- **Dockerfile, 쉘 스크립트, CI/CD** → `apt-get` (출력 형식이 안정적)
