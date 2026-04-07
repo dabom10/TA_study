@@ -63,8 +63,10 @@ Loop Closure (전체 과정)
 
 SLAM Toolbox는 **Karto SLAM** 엔진 내부의 scan correlator를 사용:
 - 후보 keyframe 범위를 pose graph 거리로 1차 필터링
-- Correlation 계산 → 임계값 초과 시 ICP로 정밀 매칭
-- SPA(Sparse Pose Adjustment)로 graph 최적화
+- Correlation 계산 → 임계값 초과 시 fine scan matching으로 정밀 검증
+- **Ceres Solver** (`LEVENBERG_MARQUARDT`)로 graph 최적화 (SPA가 아님)
+
+> 검증: `/opt/ros/humble/share/slam_toolbox/config/mapper_params_online_async.yaml` — solver_plugin: `solver_plugins::CeresSolver`, trust_strategy: `LEVENBERG_MARQUARDT` 확인
 
 ### 3D Pointcloud 기반
 
@@ -128,12 +130,24 @@ Loop Detection이 틀리면(다른 장소를 같은 곳으로 인식) 지도가 
 
 ```yaml
 # slam_toolbox 파라미터 중 loop closure 관련
-loop_search_space_dimension: 8.0      # loop 후보 탐색 반경 (m)
-loop_search_maximum_distance: 3.0     # 매칭 허용 최대 거리
-loop_match_minimum_response_fine: 0.45 # fine match 최소 유사도
-loop_match_maximum_variance_coarse: 3.0
+# 출처: /opt/ros/humble/share/slam_toolbox/config/mapper_params_online_async.yaml
+solver_plugin: solver_plugins::CeresSolver        # Ceres 사용 (SPA 아님)
+ceres_trust_strategy: LEVENBERG_MARQUARDT
+
 do_loop_closing: true
+loop_search_maximum_distance: 3.0                 # loop 후보 탐색 최대 거리 (m)
+loop_match_minimum_chain_size: 10                 # loop 인정 최소 keyframe 체인 수
+loop_match_maximum_variance_coarse: 3.0
+loop_match_minimum_response_coarse: 0.35
+loop_match_minimum_response_fine: 0.45            # fine match 최소 유사도
+
+# Correlation Parameters - Loop Closure
+loop_search_space_dimension: 8.0                  # correlation 탐색 공간 크기 (m)
+loop_search_space_resolution: 0.05
+loop_search_space_smear_deviation: 0.03
 ```
+
+> 검증: `/opt/ros/humble/share/slam_toolbox/config/mapper_params_online_async.yaml` 직접 읽음 — 모든 파라미터명·값 일치
 
 ---
 
