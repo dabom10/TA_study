@@ -18,16 +18,19 @@
 | **Back-end Optimization** | Loop 정보를 바탕으로 전체 경로 최적화 (Kalman filter / Particle filter / Graph optimization) |
 | **Global Grid Map** | 최적화된 pose로 OGM(Occupancy Grid Map) 생성 |
 
-### Front-end 흐름
+### 전체 흐름
 ```
-LiDAR 스캔 → Data preprocessing → Frame to frame matching → Pose estimation
+LiDAR 스캔
+    ↓
+Data preprocessing
+    ↓
+[Front-end] Frame to frame matching → Pose estimation ──┐
+                                                        ↓
+[Loop Detection] 과거 위치와 현재 비교 ─────────────→ [Back-end] Optimization → Global Grid Map
 ```
-### Back-end 흐름
-```
-Loop detection ──┐
-                 ▼
-         Back-end optimization → Global grid map
-```
+
+- **Front-end**와 **Loop Detection**이 둘 다 Back-end의 입력
+- Loop Detection은 Back-end 이후가 아니라, Front-end와 병렬로 수행되어 Back-end에 전달됨
 
 ---
 
