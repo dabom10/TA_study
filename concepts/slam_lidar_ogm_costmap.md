@@ -20,17 +20,15 @@
 
 ### 전체 흐름
 ```
-LiDAR 스캔
-    ↓
-Data preprocessing
-    ↓
-[Front-end] Frame to frame matching → Pose estimation ──┐
-                                                        ↓
-[Loop Detection] 과거 위치와 현재 비교 ─────────────→ [Back-end] Optimization → Global Grid Map
+LiDAR → Front-end → Back-end → Loop Detection → Global Grid Map
+              │ (Pose info)        ↑ (Subgraph info)
+              └────────────────────┘
 ```
 
-- **Front-end**와 **Loop Detection**이 둘 다 Back-end의 입력
-- Loop Detection은 Back-end 이후가 아니라, Front-end와 병렬로 수행되어 Back-end에 전달됨
+- **메인 흐름**: Front-end → Back-end → Loop Detection → Global Grid Map
+- **Front-end**는 Back-end로 가는 동시에, Pose information을 Loop Detection에도 전달
+- **Back-end**는 Subgraph information을 Loop Detection에 전달
+- **Loop Detection**이 Map optimization을 수행해 Global Grid Map 생성
 
 ---
 
