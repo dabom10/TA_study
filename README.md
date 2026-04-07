@@ -50,6 +50,7 @@ TA_study/
 | 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 (시스템/센서/카메라/SLAM 등) | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
 | 2026-04-06 | concepts | Create3 comm LED는 WiFi 연결 상태, Discovery Server 구성에서 off가 정상 | [turtlebot4_create3_comm_led_network.md](concepts/turtlebot4_create3_comm_led_network.md) |
 | 2026-04-06 | concepts | slam_toolbox 노드-토픽 관계 실습 검증 (node info, topic info, rqt_graph) | [slam_toolbox_node_topic_verification.md](concepts/slam_toolbox_node_topic_verification.md) |
+| 2026-04-07 | concepts | 미니프로젝트 사전 로봇 셋업 체크리스트 (싱글로봇 전환, Discovery Server, teleop/nav 검증) | [mini_project_robot_setup_checklist.md](concepts/mini_project_robot_setup_checklist.md) |
 
 ---
 
