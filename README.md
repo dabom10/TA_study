@@ -46,7 +46,7 @@ TA_study/
 | 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
 | 2026-04-06 | concepts | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
 | 2026-04-07 | concepts | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
-| 2026-04-07 | concepts | 미니프로젝트 사전 로봇 셋업 체크리스트 | [mini_project_robot_setup_checklist.md](concepts/mini_project_robot_setup_checklist.md) |
+| 2026-04-08 | concepts | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
 
 ---
 
