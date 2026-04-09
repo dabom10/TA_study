@@ -47,7 +47,7 @@ TA_study/
 | 2026-04-06 | concepts | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
 | 2026-04-07 | concepts | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
 | 2026-04-08 | concepts | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
-| 2026-04-09 | hardware | SLAM 실행 후 /scan 발행 없음 — turtlebot4_node가 RPLIDAR 자동 정지 | [turtlebot4_rplidar_stopped_no_scan.md](hardware/turtlebot4_rplidar_stopped_no_scan.md) |
+| 2026-04-09 | software | SLAM 실행 후 /scan 발행 없음 — turtlebot4_node가 RPLIDAR 자동 정지 | [turtlebot4_rplidar_stopped_no_scan.md](software/turtlebot4_rplidar_stopped_no_scan.md) |
 
 ---
 
