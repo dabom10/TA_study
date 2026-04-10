@@ -48,6 +48,7 @@ TA_study/
 | 2026-04-07 | concepts | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
 | 2026-04-08 | concepts | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
 | 2026-04-09 | software | SLAM 실행 후 /scan 발행 없음 — turtlebot4_node가 RPLIDAR 자동 정지 | [turtlebot4_rplidar_stopped_no_scan.md](software/turtlebot4_rplidar_stopped_no_scan.md) |
+| 2026-04-10 | concepts | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
 | 2026-04-10 | concepts | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
 
 ---
