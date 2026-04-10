@@ -28,32 +28,30 @@ AP 1개당 TurtleBot 2대 + PC 4대로 구성되는 멀티로봇 환경에서, D
 각 TurtleBot의 라즈베리파이가 Onboard Discovery Server 역할. PC는 자신이 제어하는 TurtleBot의 Discovery Server에 직접 연결.
 
 ```
-┌──────────────────────────────── AP1 영역 ────────────────────────────────┐
-│                                                                           │
-│   ┌─────────────────────────┐     ┌─────────────────────────┐            │
-│   │   TurtleBot1            │     │   TurtleBot2            │            │
-│   │   (Onboard DS #ID_A)    │     │   (Onboard DS #ID_B)    │            │
-│   └────────────┬────────────┘     └────────────┬────────────┘            │
-│                │                               │                         │
-│        ┌───────┴───────┐               ┌───────┴───────┐                 │
-│      [PC1]           [PC2]           [PC3]           [PC4]               │
-│   ROS_DISCOVERY    ROS_DISCOVERY  ROS_DISCOVERY   ROS_DISCOVERY          │
-│   SERVER=TB1_IP    SERVER=TB1_IP  SERVER=TB2_IP   SERVER=TB2_IP          │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
+                    [AP1]
+                   /     \
+          [TurtleBot1]   [TurtleBot2]
+          (Onboard DS)   (Onboard DS)
+            /      \       /      \
+         [PC1]   [PC2] [PC3]   [PC4]
 
-  [AP2 영역] TB3(DS), TB4(DS) + PC5~PC8  (동일 구조)
-  [AP3 영역] TB5(DS), TB6(DS) + PC9~PC12 (동일 구조)
+  ROS_DISCOVERY_SERVER:
+    PC1, PC2 → TurtleBot1 IP
+    PC3, PC4 → TurtleBot2 IP
+
+  AP2: [TB3(DS)]─[PC5,PC6]   [TB4(DS)]─[PC7,PC8]
+  AP3: [TB5(DS)]─[PC9,PC10]  [TB6(DS)]─[PC11,PC12]
 ```
 
 ### PC 간 통신 경로
 
 ```
-PC1 ──publish──► TurtleBot1 (DS) ──relay──► PC2 (subscribe)
-
-토픽 흐름: PC1 → [TB1 Discovery Server] → PC2
-           PC1이 TB1의 DS에 등록된 토픽을 발행하면,
-           동일 DS에 연결된 PC2가 구독
+  [PC1] ──publish──► [TurtleBot1 (DS)] ──relay──► [PC2]
+                            │
+                       토픽 등록/중계
+                            │
+                     동일 DS에 연결된
+                     PC2가 구독 수신
 ```
 
 ### 설정 포인트
@@ -87,39 +85,34 @@ export ROS_DISCOVERY_SERVER="<TB2_IP>:11811"   # Onboard ID=0 예시
 별도 Server PC를 AP 그룹 내 중앙 Discovery Server로 운영. TurtleBot 2대 + PC 4대 모두 Server PC를 바라봄.
 
 ```
-┌──────────────────────────────── AP1 영역 ────────────────────────────────┐
-│                                                                           │
-│                        ┌─────────────────┐                               │
-│                        │   Server PC     │                               │
-│                        │ (Central DS)    │                               │
-│                        └────────┬────────┘                               │
-│              ┌──────────────────┼──────────────────┐                     │
-│              │         ┌────────┴────────┐          │                     │
-│              │         │                │          │                     │
-│        ┌─────┴─────┐  [TB1]           [TB2]  ┌────┴──────┐              │
-│      [PC1]       [PC2]                      [PC3]      [PC4]             │
-│                                                                           │
-│   모든 클라이언트의 ROS_DISCOVERY_SERVER = <ServerPC_IP>:11811            │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
+                       [AP1]
+          /      /    /    \    \      \
+   [TB1] [TB2] [PC1] [PC2] [PC3] [PC4] [Server PC]
+      \     \     \     |     /     /       (DS)
+       \     \     \    |    /     /          ↑
+        └─────┴─────┴───┴───┴─────┴──────────┘
+              모두 Server PC DS에 연결
 
-  [AP2 영역] Server PC2 + TB3, TB4 + PC5~PC8  (동일 구조)
-  [AP3 영역] Server PC3 + TB5, TB6 + PC9~PC12 (동일 구조)
+  ROS_DISCOVERY_SERVER:
+    TB1, TB2, PC1~PC4 → Server PC IP (동일)
+
+  AP2: TB3, TB4, PC5~PC8   → Server PC2 DS
+  AP3: TB5, TB6, PC9~PC12  → Server PC3 DS
 ```
 
 ### 토픽 흐름
 
 ```
-PC1 ──publish──► Server PC (Central DS) ──relay──► TB1, TB2, PC2~PC4
+  [PC1] ──publish──► [Server PC (DS)] ──relay──► [TB1] [TB2] [PC2~4]
 
-nav2 실행 예시:
-PC3에서 nav2 launch
-  → PC3 토픽 → Server PC
-  → Server PC → TB1, TB2 (명령 수신)
-  → TB1, TB2 → Server PC (센서/상태 토픽)
-  → Server PC → PC1, PC2, PC4 (구독자에게 전달)
+  nav2 실행 예시 (PC3에서 launch):
 
-트래픽이 Server PC에만 누적됨
+  [PC3] ──nav2 토픽──► [Server PC (DS)] ──► [TB1] (명령 수신)
+                                        ──► [TB2] (명령 수신)
+  [TB1] ──센서/상태──► [Server PC (DS)] ──► [PC1] [PC2] [PC4]
+  [TB2] ──센서/상태──► [Server PC (DS)] ──► [PC1] [PC2] [PC4]
+
+  트래픽 누적: Server PC에만 집중
 ```
 
 ### 설정 포인트
@@ -165,20 +158,17 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 ## 전체 강의장 그림 (방식 2 기준)
 
 ```
-강의장 전체
+  [AP1]                    [AP2]                    [AP3]
+    │                        │                        │
+    ├─[TB1]                  ├─[TB3]                  ├─[TB5]
+    ├─[TB2]                  ├─[TB4]                  ├─[TB6]
+    ├─[PC1]~[PC4]            ├─[PC5]~[PC8]            ├─[PC9]~[PC12]
+    └─[Server PC1 (DS)]      └─[Server PC2 (DS)]      └─[Server PC3 (DS)]
+          ↑                         ↑                         ↑
+    TB1,TB2,PC1~4          TB3,TB4,PC5~8           TB5,TB6,PC9~12
+    모두 여기에 연결        모두 여기에 연결         모두 여기에 연결
 
-  ┌──── AP1 영역 ────┐    ┌──── AP2 영역 ────┐    ┌──── AP3 영역 ────┐
-  │  [Server PC1]   │    │  [Server PC2]   │    │  [Server PC3]   │
-  │    DS(Central)  │    │    DS(Central)  │    │    DS(Central)  │
-  │   /            \│    │   /            \│    │   /            \│
-  │ [TB1]  [TB2]   │    │ [TB3]  [TB4]   │    │ [TB5]  [TB6]   │
-  │[PC1~4]         │    │[PC5~8]         │    │[PC9~12]        │
-  └─────────────────┘    └─────────────────┘    └─────────────────┘
-         AP1                    AP2                    AP3
-    (격리된 그룹)           (격리된 그룹)           (격리된 그룹)
-
-  AP 경계 = 토픽 격리 경계
-  AP 내부 = Server PC가 단일 DS로 통합 관리
+  AP 경계 = 토픽 격리 경계 (AP1 ↔ AP2 ↔ AP3 는 서로 통신 안 함)
 ```
 
 ---
