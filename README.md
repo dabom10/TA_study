@@ -51,6 +51,7 @@ TA_study/
 | 2026-04-10 | concepts | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
 | 2026-04-10 | concepts | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
 | 2026-04-10 | concepts | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
+| 2026-04-10 | concepts | 가상환경 개념, Anaconda vs Docker 격리 수준 비교 | [virtual_environment_concepts.md](concepts/virtual_environment_concepts.md) |
 
 ---
 
