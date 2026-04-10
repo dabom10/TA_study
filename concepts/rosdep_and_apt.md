@@ -174,3 +174,42 @@ my_package/
 
 - **터미널에서 직접** → `apt`
 - **Dockerfile, 쉘 스크립트, CI/CD** → `apt-get` (출력 형식이 안정적)
+
+---
+
+## apt vs pip / PEP 668
+
+Ubuntu에서 Python 패키지를 설치할 때 pip보다 apt를 권장하는 이유.
+
+### 왜 pip가 위험한가
+
+Ubuntu 시스템 자체가 Python으로 돌아가는 부분이 있고, apt가 그 환경을 관리함. pip가 거기에 마음대로 덮어쓰면 시스템 도구가 망가질 수 있음.
+
+```
+apt install numpy (버전 1.21)   ← 시스템 도구가 이 버전 기준으로 동작
+pip install numpy (버전 1.25)   ← apt 모르게 덮어씀 → 시스템 도구 망가짐
+```
+
+ROS2 환경에서는 더 위험: rosdep은 apt 기반이라 pip로 설치한 패키지를 인식 못 함 → 버전 불일치 → 빌드 에러.
+
+### PEP 668
+
+이 문제를 막기 위해 Ubuntu 22.04부터 적용된 규격. `/usr/lib/python3.xx/EXTERNALLY-MANAGED` 마커 파일이 있으면 pip가 시스템 Python 설치를 차단함.
+
+```bash
+pip3 install numpy
+# error: externally-managed-environment
+# → apt 써라, 강제하려면 --break-system-packages (비권장)
+```
+
+마커 파일이 없어서 에러가 안 뜨는 경우도 있음 (ROS2 설치 가이드 중 삭제하라는 글이 많아서).
+
+### 올바른 설치 방법
+
+| 상황 | 방법 |
+|------|------|
+| ROS2 관련 패키지 | `sudo apt install ros-humble-패키지명` |
+| 일반 Python 패키지 | `sudo apt install python3-패키지명` |
+| apt에 없는 경우 | 가상환경(`venv`) 안에서 pip |
+
+> 검증: [PEP 668 공식 문서](https://peps.python.org/pep-0668/) — EXTERNALLY-MANAGED 마커 파일 메커니즘 확인
