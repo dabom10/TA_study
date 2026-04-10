@@ -82,22 +82,24 @@ export ROS_DISCOVERY_SERVER="<TB2_IP>:11811"   # Onboard ID=0 예시
 
 ### 구조
 
-별도 Server PC를 AP 그룹 내 중앙 Discovery Server로 운영. TurtleBot 2대 + PC 4대 모두 Server PC를 바라봄.
+별도 Server PC를 중앙 Discovery Server로 운영. AP는 TurtleBot에만 IP 부여. PC는 AP 미연결, Server PC를 통해 TB와 통신.
 
 ```
-                       [AP1]
-          /      /    /    \    \      \
-   [TB1] [TB2] [PC1] [PC2] [PC3] [PC4] [Server PC]
-      \     \     \     |     /     /       (DS)
-       \     \     \    |    /     /          ↑
-        └─────┴─────┴───┴───┴─────┴──────────┘
-              모두 Server PC DS에 연결
+  [ IP 부여 ]
+
+       [AP1]
+      /     \
+   [TB1]   [TB2]
+
+
+  [ Discovery Server 연결 ]
+
+        [Server PC (Central DS)]
+       /    \      /   |   \   \
+    [TB1] [TB2] [PC1][PC2][PC3][PC4]
 
   ROS_DISCOVERY_SERVER:
-    TB1, TB2, PC1~PC4 → Server PC IP (동일)
-
-  AP2: TB3, TB4, PC5~PC8   → Server PC2 DS
-  AP3: TB5, TB6, PC9~PC12  → Server PC3 DS
+    TB1, TB2, PC1~PC4 모두 → Server PC IP (동일)
 ```
 
 ### 토픽 흐름
@@ -158,15 +160,13 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 ## 전체 강의장 그림 (방식 2 기준)
 
 ```
-  [AP1]                    [AP2]                    [AP3]
-    │                        │                        │
-    ├─[TB1]                  ├─[TB3]                  ├─[TB5]
-    ├─[TB2]                  ├─[TB4]                  ├─[TB6]
-    ├─[PC1]~[PC4]            ├─[PC5]~[PC8]            ├─[PC9]~[PC12]
-    └─[Server PC1 (DS)]      └─[Server PC2 (DS)]      └─[Server PC3 (DS)]
-          ↑                         ↑                         ↑
-    TB1,TB2,PC1~4          TB3,TB4,PC5~8           TB5,TB6,PC9~12
-    모두 여기에 연결        모두 여기에 연결         모두 여기에 연결
+       [AP1]              [AP2]              [AP3]
+      /     \            /     \            /     \
+   [TB1]  [TB2]       [TB3]  [TB4]       [TB5]  [TB6]
+
+  [Server PC1 (DS)]  [Server PC2 (DS)]  [Server PC3 (DS)]
+   /  \   / | \ \     /  \   / | \ \     /  \   / | \ \
+ TB1 TB2 PC1~PC4    TB3 TB4 PC5~PC8    TB5 TB6 PC9~PC12
 
   AP 경계 = 토픽 격리 경계 (AP1 ↔ AP2 ↔ AP3 는 서로 통신 안 함)
 ```
