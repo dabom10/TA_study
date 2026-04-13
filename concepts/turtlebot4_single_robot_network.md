@@ -80,7 +80,7 @@ turtlebot4-setup
 | Discovery `Enabled` | `True` |
 | Discovery `Onboard Server ID` | 임의 (나중에 멀티로봇 전환 고려해서 고유하게) |
 | Discovery `Onboard Port` | `11811` |
-| Discovery `Offboard Server IP` | 비움 (싱글로봇) |
+| Discovery `Offboard Server IP` | **반드시 비움** (싱글로봇) — IP 비우면 Offboard 설정 전체 무시 |
 
 ---
 

@@ -23,48 +23,67 @@ AP 1개당 TurtleBot 2대 + PC 4대로 구성되는 멀티로봇 환경에서, D
 
 ## 방식 1 — TurtleBot Onboard Discovery Server (Server PC 없음)
 
+> **TurtleBot4 공식 문서 기준 표준 방식**
+> 출처: [TurtleBot4 User Manual - Discovery Server](https://turtlebot.github.io/turtlebot4-user-manual/setup/discovery_server.html)
+
 ### 구조
 
-각 TurtleBot의 라즈베리파이가 Onboard Discovery Server 역할. PC는 자신이 제어하는 TurtleBot의 Discovery Server에 직접 연결.
+각 TurtleBot의 라즈베리파이가 Onboard Discovery Server 역할. User PC는 모든 로봇의 Onboard Server에 Super Client로 연결.
 
 ```
                     [AP1]
                    /     \
           [TurtleBot1]   [TurtleBot2]
-          (Onboard DS)   (Onboard DS)
-            /      \       /      \
-         [PC1]   [PC2] [PC3]   [PC4]
-
-  ROS_DISCOVERY_SERVER:
-    PC1, PC2 → TurtleBot1 IP
-    PC3, PC4 → TurtleBot2 IP
-
-  AP2: [TB3(DS)]─[PC5,PC6]   [TB4(DS)]─[PC7,PC8]
-  AP3: [TB5(DS)]─[PC9,PC10]  [TB6(DS)]─[PC11,PC12]
+          (Onboard DS,   (Onboard DS,
+            ID=0)          ID=1)
+               ↑               ↑
+               └───────┬───────┘
+                   [User PC]
+         ROS_DISCOVERY_SERVER=
+         "TB1_IP:11811;TB2_IP:11811"
+            ID=0          ID=1
 ```
 
-### PC 간 통신 경로
+로봇끼리 직접 통신하지 않음. User PC가 모든 서버에 Super Client로 연결해서 전체 토픽 파악.
+
+### 공식 2로봇 설정 예시
+
+| | Onboard Server ID | Offboard IP | 비고 |
+|--|--|--|--|
+| Robot1 | 0 | **비워둠** | Offboard IP 비우면 Offboard 설정 전체 무시 |
+| Robot2 | 1 | **비워둠** | Offboard IP 비우면 Offboard 설정 전체 무시 |
 
 ```
-  [PC1] ──publish──► [TurtleBot1 (DS)] ──relay──► [PC2]
-                            │
-                       토픽 등록/중계
-                            │
-                     동일 DS에 연결된
-                     PC2가 구독 수신
+User PC ROS_DISCOVERY_SERVER:
+"<Robot1_IP>:11811;<Robot2_IP>:11811"
+  ↑ ID=0              ↑ ID=1
 ```
 
 ### 설정 포인트
 
 ```bash
-# PC1, PC2 (TurtleBot1 팀)
-export ROS_DOMAIN_ID=<TB1과 동일>
-export ROS_DISCOVERY_SERVER="<TB1_IP>:11811"   # Onboard ID=0 예시
+# Robot1 TUI:
+#   Onboard Server ID = 0
+#   Offboard IP = 비워둠  ← Offboard 설정 전체 무시됨
 
-# PC3, PC4 (TurtleBot2 팀)
-export ROS_DOMAIN_ID=<TB2와 동일>
-export ROS_DISCOVERY_SERVER="<TB2_IP>:11811"   # Onboard ID=0 예시
+# Robot2 TUI:
+#   Onboard Server ID = 1
+#   Offboard IP = 비워둠
+
+# User PC setup.bash:
+export ROS_DOMAIN_ID=<로봇과 동일>
+export ROS_DISCOVERY_SERVER="<TB1_IP>:11811;<TB2_IP>:11811"
+#                              ID=0             ID=1
+export ROS_SUPER_CLIENT=True
 ```
+
+Onboard Server ID가 `ROS_DISCOVERY_SERVER`의 세미콜론 위치(=ID)와 일치해야 한다.
+
+| Onboard Server ID | ROS_DISCOVERY_SERVER 형식 |
+|---|---|
+| 0 | `"IP:11811"` (세미콜론 없음) |
+| 1 | `";IP:11811"` (세미콜론 1개) |
+| 2 | `";;IP:11811"` (세미콜론 2개) |
 
 ### 특징
 
@@ -191,21 +210,21 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 
 ---
 
-## 멀티로봇(방식 2)에서 Onboard Server ID가 무관한 이유
+## Onboard / Offboard 개념 정리
 
-싱글로봇에서는 PC가 TB의 Onboard Server에 직접 연결하므로, PC의 `ROS_DISCOVERY_SERVER` 세미콜론 위치 = TB Onboard ID가 반드시 일치해야 했다.
+| 항목 | 의미 |
+|------|------|
+| Onboard Server | 이 로봇(Raspberry Pi)에서 실행되는 Discovery Server |
+| Offboard Server | 다른 머신(User PC 등)에서 실행되는 외부 Discovery Server |
+| Offboard IP | 비워두면 Offboard 설정 전체 무시 — Onboard Server만 사용 |
 
-방식 2에서는 TB도 PC도 **User PC(Offboard Server)에 클라이언트로 연결**한다. 아무도 TB Onboard Server에 연결하지 않으므로 Onboard Server ID는 통신에 영향 없다.
+**싱글로봇**: Offboard IP 비워둠 → Onboard Server만 동작, User PC가 이 서버에 연결
 
-```
-[싱글로봇]  PC → TB Onboard Server   (Onboard ID 맞춰야 함)
-[방식 2]    PC → User PC Offboard Server  (Onboard ID 무관)
-            TB → User PC Offboard Server  (Offboard ID만 맞추면 됨)
-```
+**멀티로봇 (방식 1, 표준)**: 각 로봇 Offboard IP 비워둠 → 각자 Onboard Server만 동작, User PC가 모든 Onboard Server에 연결
 
-TB TUI에서 맞춰야 하는 것:
-- Offboard Server IP: User PC IP
-- Offboard Server ID: User PC에서 실행하는 `fastdds discovery -i N`의 N과 동일
+**멀티로봇 (방식 2, 비표준)**: Offboard IP 설정 시 Onboard Server가 Offboard Server에 클라이언트로 접속. 로봇이 서버이면서 동시에 클라이언트 역할.
+
+> 방식 2는 TurtleBot4 공식 문서에서 "초보자에게 비추천 (네트워크 과부하)" 경고 있음
 
 ---
 
