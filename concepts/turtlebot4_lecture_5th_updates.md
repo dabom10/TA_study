@@ -133,32 +133,6 @@ Unconfigured → [configure] → Inactive → [activate] → Active
 
 ## Create3 comm LED와 ros2 topic list의 관계
 
-### comm LED off가 정상인 이유
-
-Discovery Server 구성에서 Create3는 WiFi에 직접 연결할 필요가 없다.
-
-```
-[Create3] ---USB-C--- [Raspberry Pi (Discovery Server)] ---WiFi--- [PC]
-```
-
-- **comm LED off** = Create3가 WiFi에 연결되지 않은 상태 → Discovery Server 구성에서 **정상 동작**
-- 모든 통신은 USB-C로 연결된 RPi를 통해 중계
-
-따라서 comm LED가 꺼져 있어도 `ros2 topic list`에 Create3 토픽이 정상적으로 나타난다.
-
-### Simple Discovery vs Discovery Server
-
-| 구분 | Simple Discovery | Discovery Server |
-|------|-----------------|-----------------|
-| Create3 WiFi 필요 여부 | **필요** | **불필요** |
-| comm LED | on이어야 정상 | off가 정상 |
-| 통신 경로 | Create3, RPi 각각 WiFi 직접 | Create3 → USB-C → RPi → WiFi → PC |
-| 지원 DDS | CycloneDDS, FastDDS | FastDDS only |
-
-### ros2 daemon과 DDS discovery
-
-`ros2 topic list`는 ros2 daemon에 질의한다.
-- `daemon stop` → 캐시 삭제 → robot8 토픽 사라짐
-- `daemon start` → **즉시** robot8 토픽 나타남 (RPi discovery server가 살아있어 즉시 discovery)
-
-> 검증: [Turtlebot4 Networking 공식 문서](https://turtlebot.github.io/turtlebot4-user-manual/setup/networking.html)
+- comm LED off = Create3가 WiFi 미연결 → Discovery Server 구성에서 **정상** (USB-C로 RPi 통해 통신)
+- comm LED / Simple vs DS 상세 → [electrical/03_ui_pcba.md](../concepts/turtlebot4_manual/electrical/03_ui_pcba.md)
+- daemon 재시작과 토픽 복원 동작 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md) — ros2 daemon 섹션

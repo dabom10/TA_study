@@ -147,14 +147,7 @@ export ROS_DISCOVERY_SERVER="<ServerPC_IP>:11811"   # 세미콜론 없음 = ID 0
 fastdds discovery -i 0 -p 11811                     # -i 0 = ID 0번 서버
 ```
 
-**Offboard Server ID와 세미콜론의 관계:**  
-`fastdds discovery -i 0`(서버)와 `ROS_DISCOVERY_SERVER="IP:11811"`(세미콜론 없음, 클라이언트)는 같은 기능이 아니라 **서로 대응해야 하는 쌍**이다.
-
-| 서버 `-i` 값 | 클라이언트 세미콜론 | 연결 |
-|---|---|---|
-| `-i 0` | `"IP:11811"` (없음) | O |
-| `-i 0` | `";IP:11811"` (1개) | X |
-| `-i 1` | `";IP:11811"` (1개) | O |
+> `-i` 값 ↔ 세미콜론 대응 규칙 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md) — fastdds discovery 명령 섹션
 
 ### 특징
 
@@ -166,6 +159,8 @@ fastdds discovery -i 0 -p 11811                     # -i 0 = ID 0번 서버
 | nav2 실행 시 | 어느 PC에서 실행해도 트래픽은 Server PC에만 쌓임 |
 | TurtleBot 간 통신 | 동일 DS 공유 → TB1↔TB2 직접 토픽 교환 가능 |
 | Server PC 장애 | 단일 장애점(SPOF) — Server PC 다운 시 전체 통신 중단 |
+| 비표준 주의 | **TurtleBot4 공식 문서에서 "초보자에게 비추천 (네트워크 과부하)" 경고** |
+| Offboard IP 설정 시 동작 | Onboard Server가 Offboard Server에 클라이언트로 추가 접속 — 로봇이 서버이면서 동시에 클라이언트 역할 |
 
 ---
 
@@ -203,28 +198,10 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 
 ## 다른 개념 파일과의 연결
 
-- Discovery Server 기본 개념 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)
-- Discovery Server ID / 세미콜론 위치 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)
+- Discovery Server 기본 개념, Domain ID vs Server ID, 세미콜론 규칙 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
+- 싱글로봇 TUI 설정 절차 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)
 - TurtleBot4 TUI Offboard Server IP 항목 → 방식 2 Server PC IP를 여기에 입력
 - FastDDS vs CycloneDDS 선택 → [turtlebot4_lecture_5th_updates.md](turtlebot4_lecture_5th_updates.md)
-
----
-
-## Onboard / Offboard 개념 정리
-
-| 항목 | 의미 |
-|------|------|
-| Onboard Server | 이 로봇(Raspberry Pi)에서 실행되는 Discovery Server |
-| Offboard Server | 다른 머신(User PC 등)에서 실행되는 외부 Discovery Server |
-| Offboard IP | 비워두면 Offboard 설정 전체 무시 — Onboard Server만 사용 |
-
-**싱글로봇**: Offboard IP 비워둠 → Onboard Server만 동작, User PC가 이 서버에 연결
-
-**멀티로봇 (방식 1, 표준)**: 각 로봇 Offboard IP 비워둠 → 각자 Onboard Server만 동작, User PC가 모든 Onboard Server에 연결
-
-**멀티로봇 (방식 2, 비표준)**: Offboard IP 설정 시 Onboard Server가 Offboard Server에 클라이언트로 접속. 로봇이 서버이면서 동시에 클라이언트 역할.
-
-> 방식 2는 TurtleBot4 공식 문서에서 "초보자에게 비추천 (네트워크 과부하)" 경고 있음
 
 ---
 

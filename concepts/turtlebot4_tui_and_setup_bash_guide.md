@@ -30,22 +30,7 @@ turtlebot4-setup
 
 ## 1. Discovery Server 메뉴
 
-### Discovery Server란?
-
-ROS2 노드들이 서로를 찾는(탐색하는) 방식.  
-기본 방식(Simple Discovery)은 브로드캐스트로 서로를 탐색하는데,
-이건 네트워크 트래픽이 많고 불안정함.
-
-**Discovery Server 방식**은 중앙 서버 하나를 지정해 두고,
-모든 노드가 그 서버에 자신을 등록하고 조회하는 방식.
-TurtleBot4는 기본적으로 이 방식을 사용함.
-
-```
-[User PC 노드]  ──등록/조회──▶  [Discovery Server (터틀봇 내부)]
-[터틀봇 노드]   ──등록/조회──▶  [Discovery Server (터틀봇 내부)]
-```
-
----
+> Discovery Server 개념 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
 
 ### TUI 항목 설명
 
@@ -105,21 +90,9 @@ fastdds discovery -i 0 -p 11811
 
 TUI의 Discovery Server 설정 → User PC의 `ROS_DISCOVERY_SERVER` 환경변수에 반영됨.
 
-#### ROS_DISCOVERY_SERVER 형식
+> `ROS_DISCOVERY_SERVER` 세미콜론 형식 및 Server ID 대응 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
 
-```
-서버ID0주소 ; 서버ID1주소 ; 서버ID2주소 ...
-```
-
-세미콜론(`;`)이 구분자이며, **위치(순서)가 서버 ID**를 결정함.
-
-| 값 | ID 0 | ID 1 |
-|----|------|------|
-| `192.168.1.2:11811` | 192.168.1.2:11811 | 없음 |
-| `;192.168.1.2:11811` | 없음 | 192.168.1.2:11811 |
-| `A:11811;B:11811` | A:11811 | B:11811 |
-
-#### 현재 올바른 설정 (Onboard Server ID=0 사용 시)
+#### 올바른 설정 (Onboard Server ID=0 사용 시)
 
 ```bash
 # /etc/turtlebot4_discovery/setup.bash
@@ -259,13 +232,9 @@ TUI 메뉴에는 없지만 setup.bash에 존재하는 중요한 변수.
 [ -t 0 ] && export ROS_SUPER_CLIENT=True || export ROS_SUPER_CLIENT=False
 ```
 
-| 값 | 동작 |
-|----|------|
-| `True` | Discovery Server에 등록된 **모든 노드/토픽**을 볼 수 있음 |
-| `False` | 자신과 직접 연결된 노드만 볼 수 있음 |
+인터랙티브 터미널이면 True, 아니면 False로 자동 설정. `ros2 topic list`가 제대로 동작하려면 `True`여야 함.
 
-위 코드는 **인터랙티브 터미널이면 True, 아니면 False**로 자동 설정.  
-`ros2 topic list`가 제대로 동작하려면 `True`여야 함.
+> 역할 상세 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md) — Discovery Server / Client / Super Client 역할
 
 ---
 
@@ -300,20 +269,4 @@ export ROS_DISCOVERY_SERVER="192.168.1.2:11811"
 
 ## 6. 설정 확인 체크리스트
 
-```bash
-# 1. 환경변수 확인
-echo $ROS_DISCOVERY_SERVER    # 192.168.1.2:11811 이어야 함 (세미콜론 없이)
-echo $ROS_DOMAIN_ID           # 터틀봇과 동일해야 함
-echo $ROS_SUPER_CLIENT        # True여야 토픽 전체 보임
-echo $RMW_IMPLEMENTATION      # rmw_fastrtps_cpp
-
-# 2. Discovery Server 포트 접근 확인
-nc -zv 192.168.1.2 11811      # 연결되면 정상
-
-# 3. 터틀봇에서 서버 실행 확인
-ssh ubuntu@192.168.1.2 "ps aux | grep fastdds"
-# fastdds discovery -i 0 -p 11811 이 있어야 함
-
-# 4. 토픽 확인
-ros2 topic list               # /robot8/... 토픽들이 보여야 함
-```
+> 진단 체크리스트 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md) — 빠른 진단

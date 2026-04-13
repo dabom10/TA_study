@@ -14,17 +14,7 @@
 
 ---
 
-## Domain ID vs Discovery Server ID
-
-| 항목 | 역할 | 격리 효과 |
-|------|------|-----------|
-| `ROS_DOMAIN_ID` | 로봇 간 통신 그룹 분리 | 다른 ID끼리는 아예 통신 불가 |
-| `Onboard Server ID` | 로봇 자체 Discovery Server의 ID | PC의 `ROS_DISCOVERY_SERVER` 세미콜론 위치와 매칭 |
-| `Offboard Server ID` | 외부(User PC) Discovery Server의 ID | 멀티로봇 합칠 때 중앙 서버 식별용 |
-
-> 싱글 → 멀티 전환 시나리오:
-> - 싱글: 로봇마다 다른 Domain ID + 각자 Discovery Server ID
-> - 멀티: Domain ID를 팀끼리 동일하게 → 같은 Domain 안에서 Server ID로 구분
+> Domain ID vs Discovery Server ID 역할 구분, 싱글→멀티 전환 시나리오 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
 
 ---
 
@@ -108,15 +98,7 @@ ros2 daemon stop && ros2 daemon start
 
 ---
 
-## LED 상태
-
-| LED | 정상 | 이상 시 |
-|-----|------|---------|
-| Power | 초록 | 꺼짐 → 배터리 방전 |
-| WiFi | 초록 | 꺼짐 → 와이파이 미연결 |
-| MTR | 초록 | 꺼짐 → 모터 드라이버 문제 |
-| Comm | **꺼짐 정상** | Discovery Server 구성에서 off = 정상 |
-| Battery | 초록 | 빨강 → 30% 이하, 충전 필요 |
+> LED 상태 전체 → [electrical/03_ui_pcba.md](../concepts/turtlebot4_manual/electrical/03_ui_pcba.md)
 
 ---
 

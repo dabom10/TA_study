@@ -160,6 +160,10 @@ ros2 daemon status  # 상태 확인
 
 > 검증: `ps aux | grep ros2` (로컬 실행) — `python3 ros2cli.daemon.daemonize --ros-domain-id 8` 단일 프로세스 확인
 
+**Discovery Server와 daemon 재시작:**  
+`ros2 daemon stop` → 캐시 삭제 → 토픽 사라짐  
+`ros2 daemon start` → Discovery Server가 살아있으면 **즉시** 토픽 복원 (재discovery 불필요)
+
 ---
 
 ## Simple Discovery vs Discovery Server
@@ -184,6 +188,22 @@ DDS에서 노드들이 서로를 찾는 과정을 **discovery**라고 함.
 ```
 
 > 검증: [ROS2 Discovery Server 공식 문서](https://docs.ros.org/en/humble/Tutorials/Advanced/Discovery-Server/Discovery-Server.html) — "nodes will only receive topic's discovery data if it has a writer or a reader for that topic" 확인
+
+---
+
+## Domain ID vs Discovery Server ID
+
+두 ID는 역할이 다르며, 혼동하면 연결 실패 원인을 찾기 어렵다.
+
+| 항목 | 역할 | 격리 효과 |
+|------|------|-----------|
+| `ROS_DOMAIN_ID` | 로봇 간 통신 그룹 분리 | 다른 ID끼리는 아예 통신 불가 |
+| `Onboard Server ID` | 로봇 자체 Discovery Server의 ID | PC의 `ROS_DISCOVERY_SERVER` 세미콜론 위치와 매칭 |
+| `Offboard Server ID` | 외부(User PC 등) Discovery Server의 ID | 멀티로봇 합칠 때 중앙 서버 식별용 |
+
+싱글 → 멀티 전환 시나리오:
+- **싱글**: 로봇마다 다른 Domain ID + 각자 Discovery Server ID
+- **멀티**: Domain ID를 팀끼리 동일하게 → 같은 Domain 안에서 Server ID로 구분
 
 ---
 
