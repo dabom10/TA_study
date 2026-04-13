@@ -122,11 +122,20 @@ export ROS_DISCOVERY_SERVER="<TB2_IP>:11811"   # Onboard ID=0 예시
 ```bash
 # PC1~PC4, TB1, TB2 모두 동일하게
 export ROS_DOMAIN_ID=<그룹 공통 ID>
-export ROS_DISCOVERY_SERVER="<ServerPC_IP>:11811"
+export ROS_DISCOVERY_SERVER="<ServerPC_IP>:11811"   # 세미콜론 없음 = ID 0 위치
 
 # Server PC 자체 (Discovery Server 실행)
-fastdds discovery -i 0 -p 11811
+fastdds discovery -i 0 -p 11811                     # -i 0 = ID 0번 서버
 ```
+
+**Offboard Server ID와 세미콜론의 관계:**  
+`fastdds discovery -i 0`(서버)와 `ROS_DISCOVERY_SERVER="IP:11811"`(세미콜론 없음, 클라이언트)는 같은 기능이 아니라 **서로 대응해야 하는 쌍**이다.
+
+| 서버 `-i` 값 | 클라이언트 세미콜론 | 연결 |
+|---|---|---|
+| `-i 0` | `"IP:11811"` (없음) | O |
+| `-i 0` | `";IP:11811"` (1개) | X |
+| `-i 1` | `";IP:11811"` (1개) | O |
 
 ### 특징
 
@@ -182,9 +191,26 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 
 ---
 
+## 멀티로봇(방식 2)에서 Onboard Server ID가 무관한 이유
+
+싱글로봇에서는 PC가 TB의 Onboard Server에 직접 연결하므로, PC의 `ROS_DISCOVERY_SERVER` 세미콜론 위치 = TB Onboard ID가 반드시 일치해야 했다.
+
+방식 2에서는 TB도 PC도 **User PC(Offboard Server)에 클라이언트로 연결**한다. 아무도 TB Onboard Server에 연결하지 않으므로 Onboard Server ID는 통신에 영향 없다.
+
+```
+[싱글로봇]  PC → TB Onboard Server   (Onboard ID 맞춰야 함)
+[방식 2]    PC → User PC Offboard Server  (Onboard ID 무관)
+            TB → User PC Offboard Server  (Offboard ID만 맞추면 됨)
+```
+
+TB TUI에서 맞춰야 하는 것:
+- Offboard Server IP: User PC IP
+- Offboard Server ID: User PC에서 실행하는 `fastdds discovery -i N`의 N과 동일
+
+---
+
 ## 의문점 / 나중에 파고들 것
 
-- Server PC와 TurtleBot 간 Offboard/Onboard DS ID 매핑 방법 (TUI Offboard Server ID 설정)
 - 방식 2에서 Server PC 장애 대비 이중화 가능 여부
 - 방식 1에서 TB1↔TB2 멀티로봇 토픽 공유를 위한 브리지 구성 방법
 - AP 경계를 넘는 6대 전체 통합 운영 시나리오 (필요한지 여부 포함)

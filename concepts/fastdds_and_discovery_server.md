@@ -41,6 +41,80 @@ ROS2 코드는 DDS 구현체가 뭔지 신경 쓰지 않음. **RMW(ROS Middlewar
 
 ---
 
+## Discovery Server / Client / Super Client 역할
+
+| 역할 | 동작 | 주요 사용처 |
+|------|------|-------------|
+| **Server** | 모든 클라이언트의 토픽·엔드포인트 정보를 수집·보관, 관련 노드끼리만 연결 정보 전달 | 독립 프로세스로 실행 (`fastdds discovery`) |
+| **Client** | 자신이 쓰는/읽는 토픽만 서버에 등록, 자기와 관련된 노드 정보만 수신 | 일반 ROS2 노드 |
+| **Super Client** | 서버에 연결하되 네트워크 전체 노드 정보를 전부 수신 | `ros2 topic list` 등 CLI 도구, daemon |
+
+> `ROS_SUPER_CLIENT=true`로 설정하면 Super Client 모드. PC에서 `ros2 topic list`에 모든 토픽이 표시되려면 필요.
+
+> 검증: [ROS2 Discovery Server 공식 문서](https://docs.ros.org/en/humble/Tutorials/Advanced/Discovery-Server/Discovery-Server.html) — "a kind of Client that connects to a Server, from which it receives all the available discovery information" 확인
+
+---
+
+## fastdds discovery 명령
+
+```bash
+fastdds discovery -i <ID> -l <IP> -p <PORT>
+```
+
+| 플래그 | 의미 | 기본값 |
+|--------|------|--------|
+| `-i` | Server ID (0-based). `ROS_DISCOVERY_SERVER`의 세미콜론 위치와 대응 | 필수 |
+| `-l` | 수신 대기 IP | `0.0.0.0` (모든 인터페이스) |
+| `-p` | 수신 대기 UDP 포트 | `11811` |
+| `-b` | 백업 파일 생성 (서버 재시작 시 상태 복원) | 없음 |
+
+```bash
+# ID 0, 기본값으로 실행 (가장 흔한 형태)
+fastdds discovery -i 0
+
+# ID 1, 특정 IP·포트 지정
+fastdds discovery -i 1 -l 127.0.0.1 -p 14520
+```
+
+`ROS_DISCOVERY_SERVER`와 `-i` 값의 대응:
+
+```
+fastdds discovery -i 0  →  ROS_DISCOVERY_SERVER="IP:11811"       (세미콜론 없음)
+fastdds discovery -i 1  →  ROS_DISCOVERY_SERVER=";IP:11811"      (세미콜론 1개)
+fastdds discovery -i 2  →  ROS_DISCOVERY_SERVER=";;IP:11811"     (세미콜론 2개)
+```
+
+> 검증: `fastdds discovery --help` (로컬 실행) — `-i`는 "zero based server position in ROS_DISCOVERY_SERVER" 확인
+
+---
+
+## ros2 daemon
+
+ROS2 CLI 도구(`ros2 node list`, `ros2 topic list` 등)가 빠르게 응답할 수 있도록 ROS 그래프 정보를 캐싱하는 **백그라운드 프로세스**.
+
+```bash
+ros2 daemon start   # 수동 시작 (CLI 명령 실행 시 자동 시작됨)
+ros2 daemon stop    # 중지
+ros2 daemon status  # 상태 확인
+```
+
+**터미널 간 공유 여부**: daemon은 **터미널이 아닌 OS 프로세스 단위**로 동작.  
+같은 `ROS_DOMAIN_ID`를 쓰는 터미널은 단일 daemon 프로세스를 공유한다.
+
+```
+터미널 A ──┐
+터미널 B ──┼──→  [ros2-daemon PID XXXX, domain=N]
+터미널 C ──┘
+```
+
+→ 어느 터미널에서 `ros2 daemon stop`을 실행해도 **같은 Domain ID를 쓰는 모든 터미널에 영향**.  
+→ `ROS_DOMAIN_ID`가 다르면 별도 daemon 프로세스가 생성되어 서로 독립.  
+→ stop 후 CLI 명령을 실행하면 daemon이 **자동 재시작**됨.
+
+> 검증: `ps aux | grep ros2` (로컬 실행) — `python3 ros2cli.daemon.daemonize --ros-domain-id 8` 단일 프로세스 확인
+
+---
+
 ## Simple Discovery vs Discovery Server
 
 DDS에서 노드들이 서로를 찾는 과정을 **discovery**라고 함.
