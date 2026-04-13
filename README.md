@@ -26,7 +26,7 @@ TA_study/
 
 ---
 
-## 문제 목록
+## 에러 기록
 
 | 날짜 | 분류 | 내용 | 파일 |
 |------|------|------|------|
@@ -34,24 +34,31 @@ TA_study/
 | 2026-03-31 | env | GNOME IBus 한글 전환 안 됨 | [ibus_hangul_super_space.md](env/ibus_hangul_super_space.md) |
 | 2026-03-31 | network | configure_discovery.sh 인터넷 차단 환경에서 wget 실패 | [configure_discovery_wget_fail.md](network/configure_discovery_wget_fail.md) |
 | 2026-03-31 | network | TurtleBot4 Discovery Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
-| 2026-03-31 | concepts | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](concepts/command.md) |
-| 2026-03-31 | concepts | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](concepts/turtlebot4_tui_and_setup_bash_guide.md) |
-| 2026-04-01 | concepts | rosdep/apt 개념, apt vs apt-get 차이 | [rosdep_and_apt.md](concepts/rosdep_and_apt.md) |
-| 2026-04-01 | concepts | ROS2 패키지 생성, colcon build, source/PATH 개념 | [ros2_workspace_and_package.md](concepts/ros2_workspace_and_package.md) |
-| 2026-04-02 | concepts | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](concepts/ros2_message_type_and_interface.md) |
-| 2026-04-02 | concepts | ROS2 통신 개념: Topic/Service/Action, QoS, 리매핑, Bag | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
-| 2026-04-03 | concepts | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 | [doosan_m0609_rg2_manipulation.md](concepts/doosan_m0609_rg2_manipulation.md) |
-| 2026-04-03 | concepts | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) | [serial_communication_types.md](concepts/serial_communication_types.md) |
-| 2026-04-03 | concepts | TurtleBot4 강의 변경사항, FastDDS/CycloneDDS, Create3 comm LED | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
-| 2026-04-06 | concepts | TurtleBot4 전체 토픽 상세 정리 | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
-| 2026-04-06 | concepts | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
-| 2026-04-07 | concepts | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
-| 2026-04-08 | concepts | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
 | 2026-04-09 | software | SLAM 실행 후 /scan 발행 없음 — turtlebot4_node가 RPLIDAR 자동 정지 | [turtlebot4_rplidar_stopped_no_scan.md](software/turtlebot4_rplidar_stopped_no_scan.md) |
-| 2026-04-10 | concepts | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
-| 2026-04-10 | concepts | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
-| 2026-04-10 | concepts | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
-| 2026-04-10 | concepts | 가상환경 개념, Anaconda vs Docker 격리 수준 비교 | [virtual_environment_concepts.md](concepts/virtual_environment_concepts.md) |
+
+---
+
+## 개념 정리
+
+| 날짜 | 내용 | 파일 |
+|------|------|------|
+| 2026-03-31 | 시스템 설정 및 자주 쓰는 명령어 모음 | [command.md](concepts/command.md) |
+| 2026-03-31 | TurtleBot4 TUI 항목 및 setup.bash 대응 완전 가이드 | [turtlebot4_tui_and_setup_bash_guide.md](concepts/turtlebot4_tui_and_setup_bash_guide.md) |
+| 2026-04-01 | rosdep/apt 개념, apt vs apt-get 차이 | [rosdep_and_apt.md](concepts/rosdep_and_apt.md) |
+| 2026-04-01 | ROS2 패키지 생성, colcon build, source/PATH 개념 | [ros2_workspace_and_package.md](concepts/ros2_workspace_and_package.md) |
+| 2026-04-02 | ROS2 메시지 타입, Interface 개념 및 import/package.xml 정리 | [ros2_message_type_and_interface.md](concepts/ros2_message_type_and_interface.md) |
+| 2026-04-02 | ROS2 통신 개념: Topic/Service/Action, QoS, 리매핑, Bag | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
+| 2026-04-03 | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 | [doosan_m0609_rg2_manipulation.md](concepts/doosan_m0609_rg2_manipulation.md) |
+| 2026-04-03 | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) | [serial_communication_types.md](concepts/serial_communication_types.md) |
+| 2026-04-03 | TurtleBot4 강의 변경사항, FastDDS/CycloneDDS, Create3 comm LED | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
+| 2026-04-06 | TurtleBot4 전체 토픽 상세 정리 | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
+| 2026-04-06 | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
+| 2026-04-07 | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
+| 2026-04-08 | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
+| 2026-04-10 | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
+| 2026-04-10 | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
+| 2026-04-10 | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
+| 2026-04-10 | 가상환경 개념, Anaconda vs Docker 격리 수준 비교 | [virtual_environment_concepts.md](concepts/virtual_environment_concepts.md) |
 
 ---
 
