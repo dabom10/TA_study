@@ -81,7 +81,7 @@ TA_study/
 | Mechanical - TurtleBot4 Lite | [mechanical/02_tb4_lite.md](concepts/turtlebot4_manual/mechanical/02_tb4_lite.md) | ⬜ |
 | Electrical - Create3 | [electrical/01_create3.md](concepts/turtlebot4_manual/electrical/01_create3.md) | ⬜ |
 | Electrical - Raspberry Pi 4B | [electrical/02_rpi4.md](concepts/turtlebot4_manual/electrical/02_rpi4.md) | ⬜ |
-| Electrical - User Interface PCBA | [electrical/03_ui_pcba.md](concepts/turtlebot4_manual/electrical/03_ui_pcba.md) | ⬜ |
+| Electrical - User Interface PCBA | [electrical/03_ui_pcba.md](concepts/turtlebot4_manual/electrical/03_ui_pcba.md) | ✅ |
 | Electrical - Power Budget | [electrical/04_power_budget.md](concepts/turtlebot4_manual/electrical/04_power_budget.md) | ⬜ |
 | Tutorials - Driving | [tutorials/01_driving.md](concepts/turtlebot4_manual/tutorials/01_driving.md) | ⬜ |
 | Tutorials - First Node (C++) | [tutorials/02_first_node_cpp.md](concepts/turtlebot4_manual/tutorials/02_first_node_cpp.md) | ⬜ |
