@@ -6,6 +6,92 @@
 
 ---
 
+## 기본 개념
+
+### non-fast-forward란
+
+Git push는 **원격이 로컬의 연장선일 때만** 허용된다.
+
+```
+원격:  A → B → C          ← 내가 모르는 C가 생김
+로컬:  A → B → D          ← 내가 만든 D
+```
+
+이 상태에서 push하면 C가 삭제된다. Git이 C를 먼저 가져오라며 거부하는 것이 non-fast-forward 에러.
+
+---
+
+### fetch / merge / pull
+
+**fetch**: 원격 변경사항을 다운로드만 함. 내 작업 브랜치에는 합치지 않음.
+
+```bash
+git fetch origin
+# origin/main 에 원격 커밋이 내려오지만, 내 main 은 그대로
+```
+
+**merge**: 두 갈래를 하나로 합침. merge 커밋이 새로 생긴다.
+
+```
+원격: A → B → C
+로컬: A → B → D
+merge 후: A → B → C → (merge 커밋)
+                ↗
+               D
+```
+
+**pull**: `fetch + merge` 단축 명령.
+
+```bash
+git pull origin main   # = git fetch origin + git merge origin/main
+```
+
+---
+
+### rebase
+
+내 커밋을 원격 커밋 위에 다시 쌓는 방식. merge 커밋 없이 일직선 히스토리가 된다.
+
+```
+원격: A → B → C
+로컬: A → B → D
+
+rebase 후: A → B → C → D'   ← D를 C 위에 다시 붙임
+```
+
+```bash
+git pull --rebase origin main
+```
+
+---
+
+### 충돌 마커 `<<<<<<< / ======= / >>>>>>>`
+
+같은 줄을 양쪽이 다르게 수정하면 Git이 자동 합치기에 실패하고 파일에 마커를 삽입한다.
+
+```
+<<<<<<< HEAD          ← 내 버전 (로컬)
+로봇 이름: TurtleBot
+=======               ← 구분선
+로봇 이름: Doosan
+>>>>>>> origin/main   ← 원격 버전
+```
+
+마커 3줄을 포함해 원하는 내용만 남기고 저장하면 충돌 해결.
+
+---
+
+### `git commit` vs `git rebase --continue`
+
+| 상황 | 명령 | 이유 |
+|------|------|------|
+| `git pull` (merge 방식) | `git add` → `git commit` | merge 완료를 새 커밋으로 확정 |
+| `git pull --rebase` (rebase 방식) | `git add` → `git rebase --continue` | rebase가 커밋을 하나씩 처리 중이므로 "다음 커밋으로 계속" |
+
+rebase 중에 `git commit`을 하면 rebase 흐름 밖에 커밋이 생겨버리므로 반드시 `--continue` 사용.
+
+---
+
 ## 왜 충돌이 나는가
 
 ```
