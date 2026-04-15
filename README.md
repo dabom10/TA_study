@@ -65,6 +65,7 @@ TA_study/
 | 2026-04-15 | CvBridge 개념, ROS2 Image 메시지 ↔ OpenCV 변환 | [cvbridge_and_ros2_image.md](concepts/cvbridge_and_ros2_image.md) |
 | 2026-04-15 | OpenCV 이미지 입출력 3총사: imread / imwrite / imshow | [opencv_image_io.md](concepts/opencv_image_io.md) |
 | 2026-04-15 | Depth/RGB 카메라 FOV 차이, pixel-to-pixel alignment 원리 및 필요 시점 | [depth_rgb_alignment.md](concepts/depth_rgb_alignment.md) |
+| 2026-04-15 | OAK-D Pro 하드웨어 구조 및 depthai-ros YAML 파라미터 전체 정리 | [oakd_pro_yaml_params.md](concepts/oakd_pro_yaml_params.md) |
 
 ---
 

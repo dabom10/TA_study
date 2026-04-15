@@ -51,6 +51,8 @@ Depth pixel → 3D 공간 좌표 (카메라 내부 파라미터 이용)
 
 - ROS2에서 depth-RGB aligned 토픽을 어떻게 구독하고 동기화하는가? (`message_filters::ApproximateTime`)
 - OAK-D의 경우 `stereo.setDepthAlign(dai.CameraBoardSocket.CAM_A)` 옵션으로 alignment 설정
+  → ROS2 yaml에서는 `stereo.i_align_depth: true` + `stereo.i_board_socket_id: 0`(RGB)으로 설정
+  → 상세 파라미터: [oakd_pro_yaml_params.md](oakd_pro_yaml_params.md)
 
 ---
 
