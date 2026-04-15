@@ -63,6 +63,7 @@ TA_study/
 | 2026-04-14 | git push 거부·충돌 상황별 해결법 (merge/rebase/force-with-lease) | [git_push_conflict_resolution.md](concepts/git_push_conflict_resolution.md) |
 | 2026-04-15 | 싱글/멀티 스레드 개념, Inline vs Threaded 캡처 FPS 비교 | [thread_inline_vs_threaded.md](concepts/thread_inline_vs_threaded.md) |
 | 2026-04-15 | CvBridge 개념, ROS2 Image 메시지 ↔ OpenCV 변환 | [cvbridge_and_ros2_image.md](concepts/cvbridge_and_ros2_image.md) |
+| 2026-04-15 | OpenCV 이미지 입출력 3총사: imread / imwrite / imshow | [opencv_image_io.md](concepts/opencv_image_io.md) |
 
 ---
 
