@@ -219,6 +219,97 @@ AP1: TB1, TB2   ←(섞이지 않음)→   AP2: TB3, TB4
 
 ---
 
+## Discovery 레이어 vs Data 레이어
+
+DDS는 두 레이어로 분리된다.
+
+```
+[Discovery 레이어]  ← "누가 어떤 토픽을 발행/구독하는지" 알려주는 부분
+[Data 레이어]       ← 실제 메시지가 오가는 부분 (publisher → subscriber 직접 UDP)
+```
+
+**Discovery Server는 Discovery 레이어만 담당한다.** 데이터는 Publisher → Subscriber 직접 전송.
+
+이 구분이 중요한 이유: PC에 로컬 DS를 추가해도 데이터 중복 전송은 자동으로 막히지 않는다.
+
+> 검증: [ROS2 Discovery Server 공식 문서](https://docs.ros.org/en/humble/Tutorials/Advanced/Discovery-Server/Discovery-Server.html) — Discovery Server는 discovery 정보만 관리, data flow는 publisher-subscriber 직접 연결로 명시
+
+---
+
+## PC 로컬 Discovery Server 추가 (Offboard Server)
+
+### 문제 상황 — Onboard DS만 쓸 때
+
+PC 노드 A, B가 모두 로봇 DS에 등록되어 로봇이 같은 토픽을 두 번 WiFi로 전송:
+
+```
+[Robot] ──WiFi──► [PC Node A]   ← /scan 전송
+        ──WiFi──► [PC Node B]   ← /scan 또 전송 (별도 unicast)
+         ↑
+     [Robot DS] (PC 노드 전부 여기에 등록)
+```
+
+### 해결 — PC에 로컬 DS 추가
+
+**PC에서 로컬 DS 실행:**
+```bash
+fastdds discovery -i 1 -p 11888
+# -i 1 → ROS_DISCOVERY_SERVER의 세미콜론 1개 위치(ID=1)와 대응
+```
+
+**`/etc/turtlebot4_discovery/setup.bash` 수정:**
+```bash
+# 수정 전 (로봇 DS만)
+# export ROS_DISCOVERY_SERVER="<RobotIP>:11811"
+
+# 수정 후 (로봇 DS + PC 로컬 DS)
+export ROS_DISCOVERY_SERVER="<RobotIP>:11811;<PC_IP>:11888"
+#                              ↑ ID=0           ↑ ID=1
+```
+
+**로봇 TUI에서 Offboard Server 등록:**
+```
+Offboard Server IP   → <PC_IP>
+Offboard Server Port → 11888
+Offboard Server ID   → 1
+```
+
+### 이 수정으로 바뀌는 것
+
+| 항목 | 수정 전 | 수정 후 |
+|------|---------|---------|
+| PC 노드끼리 토픽 탐색 | 로봇 DS 경유 | PC 로컬 DS에서 해결 |
+| 로봇 DS 부하 | PC 노드 전부 담당 | 로봇 관련 노드만 |
+| PC 내 노드 간 발행/구독 탐색 | WiFi 경유 | 로컬 DS로 격리 |
+
+→ **Discovery 레이어 최적화**. 로봇 DS 부하 감소, PC 노드 간 탐색 로컬화.
+
+### 한계 — 데이터 중복은 별도 설정 필요
+
+PC에 로컬 DS를 추가해도, 같은 토픽을 구독하는 PC 노드가 여럿이면 로봇은 각 노드에게 별도 unicast로 데이터를 전송한다. 이를 막으려면:
+
+**방법 A — FastDDS 공유 메모리 transport (XML profile)**
+```xml
+<!-- 같은 PC 내 노드끼리 SHM 사용, WiFi 수신은 1번만 -->
+<transport_descriptor>
+  <transport_id>SHMTransport</transport_id>
+  <type>SHM</type>
+</transport_descriptor>
+```
+
+**방법 B — 브리지 노드 아키텍처**
+```
+[Robot] ──WiFi──► [PC Bridge Node]
+                        │ 로컬 republish
+                  ┌─────┴─────┐
+              [PC Node A]  [PC Node B]
+```
+
+> 검증: [TurtleBot4 Discovery Server 공식 문서](https://turtlebot.github.io/turtlebot4-user-manual/setup/discovery_server.html) — "PC에 별도 DS 실행 시 로봇 전체 부하 가중 — 로봇 DS와 격리된 형태로 운영해야 함" 경고 확인
+> 미검증: FastDDS SHM transport가 이 시나리오에서 실제로 WiFi 수신을 줄이는지 — 로컬 XML 설정 테스트 필요
+
+---
+
 ## 다른 개념 파일과의 연결
 
 - FastDDS vs CycloneDDS 선택 이유 (RPi4 성능 한계) → [turtlebot4_lecture_5th_updates.md](turtlebot4_lecture_5th_updates.md)

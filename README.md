@@ -56,7 +56,7 @@ TA_study/
 | 2026-04-07 | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
 | 2026-04-08 | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
 | 2026-04-10 | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
-| 2026-04-10 | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
+| 2026-04-10 | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념, PC 로컬 DS 추가 설정 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
 | 2026-04-10 | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
 | 2026-04-10 | 가상환경 개념, Anaconda vs Docker 격리 수준 비교 | [virtual_environment_concepts.md](concepts/virtual_environment_concepts.md) |
 | 2026-04-13 | 오픈소스 라이선스 종류 비교 (Apache-2.0, MIT, BSD, GPL, LGPL) | [open_source_licenses.md](concepts/open_source_licenses.md) |
