@@ -66,6 +66,7 @@ TA_study/
 | 2026-04-15 | OpenCV 이미지 입출력 3총사: imread / imwrite / imshow | [opencv_image_io.md](concepts/opencv_image_io.md) |
 | 2026-04-15 | Depth/RGB 카메라 FOV 차이, pixel-to-pixel alignment 원리 및 필요 시점 | [depth_rgb_alignment.md](concepts/depth_rgb_alignment.md) |
 | 2026-04-15 | OAK-D Pro 하드웨어 구조 및 depthai-ros YAML 파라미터 전체 정리 | [oakd_pro_yaml_params.md](concepts/oakd_pro_yaml_params.md) |
+| 2026-04-22 | 모델 학습 시 train/val/test 셋 역할 차이, data leakage, 분할 비율 | [train_val_test_split.md](concepts/train_val_test_split.md) |
 
 ---
 
