@@ -36,6 +36,7 @@ TA_study/
 | 2026-03-31 | network | TurtleBot4 Discovery Server ID 불일치로 토픽 미출력 | [TUI_discovery_N_setup_bash.md](network/TUI_discovery_N_setup_bash.md) |
 | 2026-04-09 | software | SLAM 실행 후 /scan 발행 없음 — turtlebot4_node가 RPLIDAR 자동 정지 | [turtlebot4_rplidar_stopped_no_scan.md](software/turtlebot4_rplidar_stopped_no_scan.md) |
 | 2026-04-24 | env | sd_flash.sh에서 dcfldd 없음 + dpkg 커널 헤더 불일치로 apt 불가 → dd로 우회 | [sd_flash_dcfldd_dpkg_error.md](env/sd_flash_dcfldd_dpkg_error.md) |
+| 2026-04-29 | env | fdisk로 파티션 추가 시 Value out of range — 디스크 전체 할당 상태에서 Ubuntu 듀얼부팅 설치 | [ubuntu_dualboot_partition.md](env/ubuntu_dualboot_partition.md) |
 
 ---
 
