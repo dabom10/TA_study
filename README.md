@@ -38,6 +38,7 @@ TA_study/
 | 2026-04-24 | env | sd_flash.sh에서 dcfldd 없음 + dpkg 커널 헤더 불일치로 apt 불가 → dd로 우회 | [sd_flash_dcfldd_dpkg_error.md](env/sd_flash_dcfldd_dpkg_error.md) |
 | 2026-04-29 | env | fdisk로 파티션 추가 시 Value out of range — 디스크 전체 할당 상태에서 Ubuntu 듀얼부팅 설치 | [ubuntu_dualboot_partition.md](env/ubuntu_dualboot_partition.md) |
 | 2026-05-04 | network | Simple Discovery 설정 후 ros2 topic list 미출력 — 로봇 setup.bash에 ROS_DISCOVERY_SERVER 잔존 | [simple_discovery_ros_discovery_server_conflict.md](network/simple_discovery_ros_discovery_server_conflict.md) |
+| 2026-05-06 | network | WiFi 변경 후 Create3 토픽(battery_state 등) 미발행 — turtlebot4-setup Reset Create3로 해결 | [wifi_change_create3_reset.md](network/wifi_change_create3_reset.md) |
 
 ---
 
