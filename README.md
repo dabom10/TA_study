@@ -39,6 +39,7 @@ TA_study/
 | 2026-04-29 | env | fdisk로 파티션 추가 시 Value out of range — 디스크 전체 할당 상태에서 Ubuntu 듀얼부팅 설치 | [ubuntu_dualboot_partition.md](env/ubuntu_dualboot_partition.md) |
 | 2026-05-04 | network | Simple Discovery 설정 후 ros2 topic list 미출력 — 로봇 setup.bash에 ROS_DISCOVERY_SERVER 잔존 | [simple_discovery_ros_discovery_server_conflict.md](network/simple_discovery_ros_discovery_server_conflict.md) |
 | 2026-05-06 | network | WiFi 변경 후 Create3 토픽(battery_state 등) 미발행 — turtlebot4-setup Reset Create3로 해결 | [wifi_change_create3_reset.md](network/wifi_change_create3_reset.md) |
+| 2026-05-06 | network | PC의 ROS_DISCOVERY_SERVER 주석 처리로 로봇 토픽 미출력 | [pc_discovery_server_not_configured.md](network/pc_discovery_server_not_configured.md) |
 
 ---
 
