@@ -17,7 +17,7 @@ Jazzy는 FastDDS 버전을 올리고 Discovery Server v2를 완성시키면서, 
 > 검증: 로컬 `apt-cache show ros-jazzy-fastrtps` — `2.14.6` 확인  
 > 검증: https://github.com/ros2/ros2/blob/jazzy/ros2.repos — `eProsima/Fast-DDS version: 2.14.x` 확인  
 > 검증: https://docs.ros.org/en/humble/Concepts/Intermediate/About-Different-Middleware-Vendors.html — Humble 기본값 FastDDS 확인  
-> 미검증: Humble의 정확한 FastDDS 버전 (현재 환경에 Humble 미설치, 2.6.x는 커뮤니티 통설)
+> 검증: WebSearch (ros2-gbp/fastdds-release, github.com/ros2/ros2 humble release) — Humble FastDDS 2.6.x (최신 패치 2.6.11) 확인
 
 **FastDDS 2.14.x에서 달라진 것:**
 
@@ -37,16 +37,27 @@ export ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
 
 | 값 | 동작 |
 |----|------|
-| `SUBNET` | 같은 서브넷(라우터 내부) 전체에서 멀티캐스트 (Humble 기본 동작과 동일) |
+| `SUBNET` | 서브넷 전체 멀티캐스트로 노드 발견 (기본값, Humble 기본 동작과 동일) |
 | `LOCALHOST` | 같은 PC 내부끼리만 discovery |
-| `OFF` | 자동 discovery 비활성화 (Discovery Server만 사용) |
+| `OFF` | 자동 discovery 완전 비활성화 (같은 PC도 포함) |
+| `SYSTEM_DEFAULT` | DDS 구현체 기본값 유지 (Jazzy가 강제하는 동작 없음) |
+
+### ROS_STATIC_PEERS (함께 쓰는 환경변수)
+
+```bash
+export ROS_STATIC_PEERS="<IP1>;<IP2>"
+```
+
+`ROS_AUTOMATIC_DISCOVERY_RANGE=OFF` 상태에서도 특정 주소를 명시해 수동으로 연결 가능.  
+세미콜론으로 구분해 여러 주소 지정.  
+`OFF`와 함께 쓰면 "지정한 주소하고만 통신"하는 화이트리스트 효과.
 
 **Humble과의 차이:**  
-Humble에는 이 변수가 없었고, Simple Discovery는 항상 서브넷 전체 멀티캐스트였음.  
-Jazzy는 범위를 명시적으로 제어할 수 있게 됐다.
+Humble에는 두 변수 모두 없었고, Simple Discovery는 항상 서브넷 전체 멀티캐스트였음.  
+Jazzy는 범위와 대상을 명시적으로 제어할 수 있게 됐다.
 
 > 검증: 로컬 `printenv | grep ROS` — 현재 Jazzy 환경에서 `ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET` 확인  
-> 미검증: 각 값의 내부 동작 세부 — 공식 Jazzy discovery 문서 접근 실패 (404)
+> 검증: https://docs.ros.org/en/jazzy/Tutorials/Advanced/Improved-Dynamic-Discovery.html — 값 4종(SUBNET/LOCALHOST/OFF/SYSTEM_DEFAULT), ROS_STATIC_PEERS 모두 확인
 
 ---
 
@@ -142,7 +153,8 @@ Jazzy에서 `ROS_SUPER_CLIENT`를 인터랙티브 터미널에서만 True로 설
 |------|--------|-------|------|
 | FastDDS 버전 | 2.6.x | 2.14.x | DS v2 완성 |
 | 기본 RMW | `rmw_fastrtps_cpp` | `rmw_fastrtps_cpp` | 동일 |
-| ROS_AUTOMATIC_DISCOVERY_RANGE | 없음 | SUBNET (기본) | Simple Discovery 범위 제어 |
+| ROS_AUTOMATIC_DISCOVERY_RANGE | 없음 | SUBNET/LOCALHOST/OFF/SYSTEM_DEFAULT | Simple Discovery 범위 제어 |
+| ROS_STATIC_PEERS | 없음 | `;` 구분 IP 목록 | 수동 연결 대상 지정 |
 | Create3 WiFi | 필수 (2.4GHz) | 금지 | RPi 5GHz 단독 가능 |
 | create3_republisher | 선택 | 필수 | 항상 실행 |
 | Create3 namespace | 직접 설정 | `/_do_not_use` | WiFi ROS2 비활성화 |
