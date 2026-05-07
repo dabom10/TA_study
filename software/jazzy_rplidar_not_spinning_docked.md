@@ -6,13 +6,12 @@
 - ROS2: Jazzy
 - 패키지: turtlebot4_node, rplidar_ros
 
-## 문제 상황
+## 상황
 
-Humble → Jazzy 업데이트 이후, 네비게이션 실행 시 `/scan` 토픽 미발행 → localization(AMCL) 동작 불가.
+Humble에서는 dock 여부와 무관하게 계속 회전하고, 절전 모드에서만 정지했음.
+Jazzy로 업데이트한 이후에는 dock 상태에서 자동 정지, undock 상태에서만 회전.
 
-실제 원인은 두 가지가 겹쳐서 발생:
-1. Jazzy에서 `power_saver` 기본값이 `true` → dock 상태에서 RPLIDAR 자동 정지 (설계 의도)
-2. 네비게이션 스크립트의 조건 버그 → undock이 수행되지 않아 로봇이 dock 상태 유지
+동작 차이가 궁금해서 원인 분석. 에러 아님.
 
 ## 원인
 
@@ -42,12 +41,15 @@ dock 상태에서 RPLIDAR를 정지하는 것은 효율적인 설계 선택: doc
 | | Humble 로봇 | Jazzy 로봇 |
 |---|---|---|
 | `power_saver` 코드 기본값 | `true` (소스 동일) | `true` (기본값) |
-| dock 상태 RPLIDAR | 미검증 (버전·config 의존) | 즉시 중지 |
-| undock 후 RPLIDAR | 미검증 | undock 전환 시 시작 |
+| dock 상태 RPLIDAR | 계속 회전 (dock 무관) | 즉시 중지 |
+| undock 후 RPLIDAR | 계속 회전 유지 | undock 전환 시 시작 |
+| 절전 모드 | 정지 | — (dock 시 정지로 대체) |
 
 - 코드 기본값은 두 브랜치 모두 `true`로 동일
-- Humble 로봇에서 RPLIDAR가 항상 회전했다면, power_saver 기능이 없던 구버전 패키지를 사용했거나 `/etc/turtlebot4/` config 파일에서 `power_saver: false`로 override된 경우 (robot-specific, 미검증)
+- Humble 로봇에서 dock 무관 계속 회전했던 것은 `/etc/turtlebot4/` config 파일에서 `power_saver: false`로 override되었거나 구버전 패키지 사용 가능성 있음 (직접 관찰, config 파일 미확인)
 - turtlebot4_node 코드 자체는 Humble과 동일한 구조
+
+> 검증: [직접 관찰] Humble 로봇 — dock/undock 무관 계속 회전, 절전 모드에서만 정지
 
 > 검증: [humble/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/humble/turtlebot4_node/src/turtlebot4.cpp), [jazzy/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/jazzy/turtlebot4_node/src/turtlebot4.cpp) — `declare_parameter("power_saver", true)` 및 `dock_status_callback` 코드 양쪽 동일 확인
 
@@ -59,50 +61,24 @@ RPLIDAR 시작은 dock → undock **상태 변화** 시점에만 발생. 노드 
 
 → 로봇이 dock 상태인 채로 turtlebot4_node가 기동되고 undock이 수행되지 않으면, RPLIDAR 시작 명령이 전달되지 않음.
 
-### 네비게이션 스크립트 조건 버그
+## dock 상태 무관 nav to goal 확인
+
+RPLIDAR가 undock 전환 시점에만 시작되므로, nav to goal 스크립트 시작 시 dock 상태이면 명시적으로 undock 해줘야 RPLIDAR가 시작됨.
 
 ```python
-# 버그: is_docked==False일 때 undock() 호출 → dock 상태 로봇은 그대로
-if not navigator.getDockedStatus():
-    navigator.undock()
-```
-
-`not`이 붙어 있어 실제로는 이미 undock된 상태에서 undock()을 호출하고, dock 상태에서는 아무것도 하지 않음.  
-결과적으로 로봇이 dock 상태 유지 → RPLIDAR 미시작.
-
-## 진단 순서
-
-```bash
-# 1. dock 상태 확인
-ros2 topic echo /robot8/dock_status --once
-
-# 2. RPLIDAR 토픽 확인
-ros2 topic hz /robot8/scan
-
-# 3. turtlebot4_node 상태 확인
-ros2 node info /robot8/turtlebot4_node
-```
-
-## 해결 방법
-
-`3_1_a_nav_to_pose.py`의 조건 버그 수정:
-
-```python
-# 수정 전 (버그)
-if not navigator.getDockedStatus():
-    navigator.undock()
-
-# 수정 후: dock 상태일 때만 undock → dock→undock 전환 → RPLIDAR 시작
+# dock 상태일 때만 undock → dock→undock 전환 → RPLIDAR 시작
+# 이미 undocked이면 skip
 if navigator.getDockedStatus():
     navigator.undock()
 ```
 
-이후 실행 흐름:
+실행 흐름:
 1. dock 상태 → `undock()` → RPLIDAR 시작 → `/scan` 발행
 2. 이미 undocked → skip
 3. `setInitialPose()` → `waitUntilNav2Active()` → `startToPose()`
 
+이 패턴으로 시작 dock 상태와 무관하게 nav to goal 동작 확인.
+
 ## 참고
 
-- 동일 증상(Humble, SLAM 도중 정지): [turtlebot4_rplidar_stopped_no_scan.md](turtlebot4_rplidar_stopped_no_scan.md)
-- Jazzy turtlebot4_node 동작 변경 관련 공식 문서: 해당 없음 — 코드 변경 자체가 없으므로 문서도 없음. 동작 차이는 `power_saver` 파라미터 값 차이에서 기인
+- Jazzy turtlebot4_node 동작 변경 관련 공식 문서: 해당 없음 — 코드 변경 자체가 없으므로 문서도 없음. 동작 차이는 `power_saver` 파라미터 및 config 값 차이에서 기인
