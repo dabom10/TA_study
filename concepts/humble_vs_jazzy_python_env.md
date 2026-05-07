@@ -106,6 +106,46 @@ OpenCV는 4.13 → 4.6으로 내려도 API 하위 호환 유지되므로 코드 
 
 ---
 
+## Jazzy 환경 설치 명령어 (실제 적용 순서)
+
+### 1단계: apt 패키지 설치
+
+```bash
+sudo apt update
+
+sudo apt install -y \
+    ros-jazzy-turtlebot4-navigation \
+    ros-jazzy-nav2-simple-commander \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-tf2-geometry-msgs \
+    ros-jazzy-tf2-ros \
+    ros-jazzy-sensor-msgs \
+    ros-jazzy-geometry-msgs \
+    ros-jazzy-message-filters \
+    ros-jazzy-image-transport \
+    python3-opencv \
+    python3-numpy \
+    python3-flask \
+    python3-flask-socketio
+
+sudo apt install python3-pip
+```
+
+### 2단계: pip 패키지 설치 (apt에 없는 것만)
+
+```bash
+pip install ultralytics --break-system-packages
+```
+
+### 3단계: numpy 버전 충돌 수정 (ultralytics가 numpy 2.x를 덮어쓰기 때문)
+
+```bash
+pip install "numpy==1.26.4" --break-system-packages
+pip uninstall opencv-python -y --break-system-packages
+```
+
+---
+
 ## 최종 설치 상태 (검증 완료)
 
 ```bash
