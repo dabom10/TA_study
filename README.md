@@ -75,6 +75,7 @@ TA_study/
 | 2026-04-22 | 모델 학습 시 train/val/test 셋 역할 차이, data leakage, 분할 비율 | [train_val_test_split.md](concepts/train_val_test_split.md) |
 | 2026-04-23 | OAK-D image transport 토픽 구조, RGB `/compressed` vs Depth `image_raw` 이유 | [oakd_image_transport_topics.md](concepts/oakd_image_transport_topics.md) |
 | 2026-05-06 | Humble vs Jazzy FastDDS 비교 — 버전, Discovery Server v2, Create3 분리, create3_republisher 필수화 | [humble_vs_jazzy_fastdds.md](concepts/humble_vs_jazzy_fastdds.md) |
+| 2026-05-07 | Humble vs Jazzy Python 환경 차이 — 공식 버전, tf2 import 변경, PEP 668, --break-system-packages, numpy 충돌 | [humble_vs_jazzy_python_env.md](concepts/humble_vs_jazzy_python_env.md) |
 
 ---
 
