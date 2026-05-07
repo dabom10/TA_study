@@ -25,29 +25,33 @@ Humble → Jazzy 업데이트 이후, 네비게이션 실행 시 `/scan` 토픽 
 ```cpp
 if (dock_status_msg->is_docked != is_docked_ && power_saver_) {
   if (dock_status_msg->is_docked) {
-    rplidar_stop_function_callback();   // dock 시 RPLIDAR 정지
+    oakd_stop_function_callback();
+    rplidar_stop_function_callback();
   } else {
-    rplidar_start_function_callback();  // undock 시 RPLIDAR 시작
+    oakd_start_function_callback();
+    rplidar_start_function_callback();
   }
+  is_docked_ = dock_status_msg->is_docked;
 }
 ```
 
 dock 상태에서 RPLIDAR를 정지하는 것은 효율적인 설계 선택: dock 중에는 위치 추정 외에 RPLIDAR로 할 수 있는 작업이 없기 때문.
 
-**Humble과 Jazzy 간 동작 차이의 원인: `power_saver` 파라미터 값**
+**Humble과 Jazzy 간 동작 차이**
 
 | | Humble 로봇 | Jazzy 로봇 |
 |---|---|---|
-| `power_saver` 값 | `false` (구버전 기본값) | `true` (기본값) |
-| dock 상태 RPLIDAR | 회전 지속, `/scan` 발행 | 즉시 중지 |
-| undock 후 RPLIDAR | 항상 동작 중 | undock 전환 시 시작 |
+| `power_saver` 코드 기본값 | `true` (소스 동일) | `true` (기본값) |
+| dock 상태 RPLIDAR | 미검증 (버전·config 의존) | 즉시 중지 |
+| undock 후 RPLIDAR | 미검증 | undock 전환 시 시작 |
 
-- `power_saver: false`이면 `dock_status_callback` 조건(`&& power_saver_`)이 false → RPLIDAR 제어 없음
-- turtlebot4_node 코드 자체는 Humble과 동일한 구조, Jazzy에서 변경된 것 없음
+- 코드 기본값은 두 브랜치 모두 `true`로 동일
+- Humble 로봇에서 RPLIDAR가 항상 회전했다면, power_saver 기능이 없던 구버전 패키지를 사용했거나 `/etc/turtlebot4/` config 파일에서 `power_saver: false`로 override된 경우 (robot-specific, 미검증)
+- turtlebot4_node 코드 자체는 Humble과 동일한 구조
 
-> 검증: [humble/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/humble/turtlebot4_node/src/turtlebot4.cpp), [jazzy/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/jazzy/turtlebot4_node/src/turtlebot4.cpp) — `dock_status_callback` 코드 동일 확인
+> 검증: [humble/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/humble/turtlebot4_node/src/turtlebot4.cpp), [jazzy/turtlebot4.cpp](https://raw.githubusercontent.com/turtlebot/turtlebot4/jazzy/turtlebot4_node/src/turtlebot4.cpp) — `declare_parameter("power_saver", true)` 및 `dock_status_callback` 코드 양쪽 동일 확인
 
-> 미검증: Humble 로봇 `/etc/turtlebot4/` config 실제 파일 내용 — 웹으로 확인 불가 (robot-specific)
+> 미검증: Humble 로봇 `/etc/turtlebot4/` config 실제 파일 내용, 설치된 turtlebot4_node 버전 — robot-specific
 
 ### RPLIDAR 시작 조건: 상태 전환 시점
 
