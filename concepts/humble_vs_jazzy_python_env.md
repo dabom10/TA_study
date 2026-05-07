@@ -22,19 +22,19 @@ Jazzy 공식 버전과 다른 버전이 설치되면 ROS2 패키지(특히 `cv_b
 
 ## 코드 호환성 차이
 
-### tf2_geometry_msgs import 경로 변경
+### tf2_geometry_msgs import 패턴
 
 ```python
-# Humble 스타일 (Jazzy에서 실패 가능)
+# 불필요한 직접 import (do_transform_point를 실제로 호출하지 않는 경우)
 from tf2_geometry_msgs.tf2_geometry_msgs import do_transform_point
 
-# Jazzy 올바른 방법 (타입 등록만 하면 됨)
+# 충분한 방법 (tf_buffer.transform()이 PointStamped 등을 처리하려면 타입 등록 필요)
 import tf2_geometry_msgs
 ```
 
-실제 transform은 `tf_buffer.transform()`으로 처리하므로 `do_transform_point`를 직접 호출하지 않는 경우 import만 바꾸면 됨.
+`tf_buffer.transform()`이 geometry_msgs 타입을 처리하려면 `import tf2_geometry_msgs`로 타입을 등록해야 함. `do_transform_point`를 직접 호출하지 않는 코드라면 `import tf2_geometry_msgs`로 충분.
 
-> 검증: geometry2 GitHub jazzy branch CHANGELOG, GitHub web search — 일치
+> 미검증: geometry2 jazzy CHANGELOG에 이 import 경로가 공식적으로 deprecated됐다는 명시 없음. 코드 동작 기준으로 서술.
 
 ### 그 외 주요 변경
 
@@ -42,7 +42,7 @@ import tf2_geometry_msgs
 |------|--------|-------|
 | cmd_vel 메시지 | `Twist` | `TwistStamped` (enable_stamped_cmd_vel 파라미터) |
 | BehaviorTree.CPP | 3.8 | 4.5+ (BT XML 형식 변경) |
-| Nav2 기본 로컬 플래너 | DWB | MPPI |
+| Nav2 기본 로컬 플래너 | DWB | MPPI (TurtleBot4 기준) |
 | TurtleBot4 패키지 | ros-humble-turtlebot4-* | ros-jazzy-turtlebot4-* |
 
 ---
