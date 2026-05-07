@@ -41,7 +41,7 @@ TA_study/
 | 2026-05-06 | network | WiFi 변경 후 Create3 토픽(battery_state 등) 미발행 — turtlebot4-setup Reset Create3로 해결 | [wifi_change_create3_reset.md](network/wifi_change_create3_reset.md) |
 | 2026-05-06 | network | PC의 ROS_DISCOVERY_SERVER 주석 처리로 로봇 토픽 미출력 | [pc_discovery_server_not_configured.md](network/pc_discovery_server_not_configured.md) |
 | 2026-05-06 | software | teleop_twist_keyboard Jazzy에서 로봇 미반응 — cmd_vel TwistStamped 전환, stamped:=true 필요 | [teleop_twist_keyboard_jazzy_twiststamped.md](software/teleop_twist_keyboard_jazzy_twiststamped.md) |
-| 2026-05-07 | software | Jazzy 업데이트 후 undock 상태에서 RPLIDAR 미회전 — power_saver=true, dock 상태 변화 시점에만 시작 | [jazzy_rplidar_not_spinning_undocked.md](software/jazzy_rplidar_not_spinning_undocked.md) |
+| 2026-05-07 | software | Jazzy 업데이트 후 dock 상태에서 RPLIDAR 미회전 — power_saver=true 설계 의도 + 네비게이션 스크립트 조건 버그 | [jazzy_rplidar_not_spinning_docked.md](software/jazzy_rplidar_not_spinning_docked.md) |
 
 ---
 
