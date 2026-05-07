@@ -52,16 +52,24 @@ ros2 node info /robot8/turtlebot4_node
 
 ## 해결 방법
 
-navigation 실행 전 로봇을 **dock 상태**에서 시작.
-`3_1_a_nav_to_pose.py` 스크립트 자체가 이를 전제로 작성되어 있음:
+`3_1_a_nav_to_pose.py`의 조건 버그 수정 — dock 상태일 때만 undock 호출:
 
 ```python
+# 수정 전 (버그): 이미 undocked 상태에서 undock() 재호출, dock 상태는 그대로
 if not navigator.getDockedStatus():
-    navigator.info('Docking before initialising pose')
-    navigator.dock()
+    navigator.undock()
+
+# 수정 후: dock 상태일 때만 undock → dock→undock 전환 → RPLIDAR 시작
+if navigator.getDockedStatus():
+    navigator.undock()
 ```
 
-undock 후에는 RPLIDAR가 정상 회전하며 `/scan` 발행됨.
+이후 실행 흐름:
+1. dock 상태 → `undock()` → RPLIDAR 시작 → `/scan` 발행
+2. already undocked → skip (RPLIDAR 이미 동작 중 전제)
+3. `setInitialPose()` → `waitUntilNav2Active()` → `startToPose()`
+
+dock/undock 상태 무관하게 정상 동작.
 
 ## 참고
 
