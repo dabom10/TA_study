@@ -42,6 +42,7 @@ TA_study/
 | 2026-05-06 | network | PC의 ROS_DISCOVERY_SERVER 주석 처리로 로봇 토픽 미출력 | [pc_discovery_server_not_configured.md](network/pc_discovery_server_not_configured.md) |
 | 2026-05-06 | software | teleop_twist_keyboard Jazzy에서 로봇 미반응 — cmd_vel TwistStamped 전환, stamped:=true 필요 | [teleop_twist_keyboard_jazzy_twiststamped.md](software/teleop_twist_keyboard_jazzy_twiststamped.md) |
 | 2026-05-07 | software | Jazzy 업데이트 후 dock 상태에서 RPLIDAR 미회전 — power_saver=true 설계 의도 + 네비게이션 스크립트 조건 버그 | [jazzy_rplidar_not_spinning_docked.md](software/jazzy_rplidar_not_spinning_docked.md) |
+| 2026-05-08 | software | depthai yaml stereo 섹션 오타(`streo:`)로 파라미터 미적용 — 토픽은 발행되나 fps 등 설정값 무시됨 | [depthai_yaml_stereo_typo.md](software/depthai_yaml_stereo_typo.md) |
 
 ---
 
