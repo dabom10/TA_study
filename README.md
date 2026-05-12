@@ -43,6 +43,7 @@ TA_study/
 | 2026-05-06 | software | teleop_twist_keyboard Jazzy에서 로봇 미반응 — cmd_vel TwistStamped 전환, stamped:=true 필요 | [teleop_twist_keyboard_jazzy_twiststamped.md](software/teleop_twist_keyboard_jazzy_twiststamped.md) |
 | 2026-05-07 | software | Jazzy 업데이트 후 dock 상태에서 RPLIDAR 미회전 — power_saver=true 설계 의도 + 네비게이션 스크립트 조건 버그 | [jazzy_rplidar_not_spinning_docked.md](software/jazzy_rplidar_not_spinning_docked.md) |
 | 2026-05-08 | software | depthai yaml stereo 섹션 오타(`streo:`)로 파라미터 미적용 — 토픽은 발행되나 fps 등 설정값 무시됨 | [depthai_yaml_stereo_typo.md](software/depthai_yaml_stereo_typo.md) |
+| 2026-05-12 | software | Nav2 goal abort — 멀티머신 클럭 차이(0.21s) + TF lag(0.13s)로 transform_tolerance 부족, source_timeout 초과 | [nav2_transform_tolerance_source_timeout.md](software/nav2_transform_tolerance_source_timeout.md) |
 
 ---
 
