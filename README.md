@@ -45,6 +45,8 @@ TA_study/
 | 2026-05-08 | software | depthai yaml stereo 섹션 오타(`streo:`)로 파라미터 미적용 — 토픽은 발행되나 fps 등 설정값 무시됨 | [depthai_yaml_stereo_typo.md](software/depthai_yaml_stereo_typo.md) |
 | 2026-05-12 | software | Nav2 goal abort — 멀티머신 클럭 차이(0.21s) + TF lag(0.13s)로 transform_tolerance 부족, source_timeout 초과 | [nav2_transform_tolerance_source_timeout.md](software/nav2_transform_tolerance_source_timeout.md) |
 | 2026-05-12 | network | OAK-D 이미지 토픽 3~7Hz → ipfrag_high_thresh 4MB 부족으로 fragment 드롭, rmem+ipfrag 128MB로 증가 | [ros2_image_topic_low_hz.md](network/ros2_image_topic_low_hz.md) |
+| 2026-05-12 | network | WiFi 원격 수신 시 image_raw 버스트 손실 — Simple Discovery 멀티캐스트 실패 + raw 대역폭 초과, Discovery Server 전환으로 해결 | [ros2_image_raw_message_lost_wifi.md](network/ros2_image_raw_message_lost_wifi.md) |
+| 2026-05-18 | software | 멀티로봇 네임스페이스에서 TransformListener가 /tf(전역) 구독 → AMCL의 /robot8/tf map→odom 못 받음, -r /tf:=tf 추가로 해결 | [tf_listener_namespace_mismatch.md](software/tf_listener_namespace_mismatch.md) |
 
 ---
 
@@ -80,6 +82,7 @@ TA_study/
 | 2026-04-23 | OAK-D image transport 토픽 구조, RGB `/compressed` vs Depth `image_raw` 이유 | [oakd_image_transport_topics.md](concepts/oakd_image_transport_topics.md) |
 | 2026-05-06 | Humble vs Jazzy FastDDS 비교 — 버전, Discovery Server v2, Create3 분리, create3_republisher 필수화 | [humble_vs_jazzy_fastdds.md](concepts/humble_vs_jazzy_fastdds.md) |
 | 2026-05-07 | Humble vs Jazzy Python 환경 차이 — 공식 버전, tf2 import 변경, PEP 668, --break-system-packages, numpy 충돌 | [humble_vs_jazzy_python_env.md](concepts/humble_vs_jazzy_python_env.md) |
+| 2026-05-18 | Nav2 / AMCL / TF 트리 — map·odom 프레임 역할, AMCL 동작 원리, Buffer+TransformListener, depth→지도 좌표 파이프라인 | [nav2_amcl_tf_tree.md](concepts/nav2_amcl_tf_tree.md) |
 
 ---
 
