@@ -39,7 +39,7 @@ depthai-ros 드라이버의 `oakd.yaml` 파라미터는 `camera` / `rgb` / `ster
 | 파라미터 | 값 | 의미 |
 |---|---|---|
 | `i_board_socket_id` | `0` | 중앙 RGB 센서 (CAM_A). 0=RGB, 1=Left Mono, 2=Right Mono |
-| `i_resolution` | `640P` | 센서 캡처 해상도 (내부 설정값) |
+| `i_resolution` | `720P` | 센서 캡처 해상도. RGB 유효값: `720P` `1080P` `4K` `12MP` `800P` `1200P` 등 (`640P` 무효) |
 | `i_width` / `i_height` | `704` / `704` | 출력 해상도. **16의 배수 필수** (align_depth 조건) |
 | `i_fps` | `10.0` | 프레임레이트. stereo fps와 맞춰야 동기화 정상 동작 |
 | `i_publish_topic` | `true` | `/rgb/image_raw` ROS 토픽 퍼블리시 |
@@ -89,7 +89,7 @@ Left Mono + Right Mono
     → align_depth: RGB 좌표계 재투영 + 704×704 upscale
     → /stereo/depth
 
-RGB (640P 캡처 → 704×704 출력)
+RGB (720P 캡처 → 704×704 출력)
     → low_bandwidth 압축
     → /rgb/image_raw (704×704)
     → /rgb/preview/image_raw (320×320)
@@ -104,4 +104,5 @@ RGB (640P 캡처 → 704×704 출력)
 
 > 검증: [OAK-D Pro Hardware Docs](https://docs.luxonis.com/projects/hardware/en/latest/pages/DM9098pro.html) — 센서 구성(12MP RGB, OV9782 스테레오, IR 프로젝터, BNO085 IMU, baseline 7.5cm) 일치
 > 검증: [RGB Depth Alignment – DepthAI](https://docs.luxonis.com/projects/api/en/latest/samples/StereoDepth/rgb_depth_aligned/) — align_depth 시 RGB 해상도로 upscale, 16의 배수 제약 일치
-> 검증: [DepthAI ROS Driver](https://docs.luxonis.com/software/ros/depthai-ros/driver/) — 파라미터 설명 일치
+> 검증: [DepthAI ROS Driver](https://docs.luxonis.com/software/ros/depthai-ros/driver/) — i_publish_topic, i_enable_preview, i_align_depth 등 일반 파라미터 설명 일치 (i_resolution 항목 없음)
+> 검증: [depthai-ros sensor_helpers.cpp (jazzy)](https://github.com/luxonis/depthai-ros/blob/jazzy/depthai_ros_driver/src/dai_nodes/sensors/sensor_helpers.cpp) — `rgbResolutionMap` 직접 확인: `640P` 없음, `720P`/`1080P`/`4K`/`12MP`/`800P`/`1200P`/`5MP` 등 유효
