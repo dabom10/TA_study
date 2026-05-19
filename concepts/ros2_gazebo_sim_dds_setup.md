@@ -72,6 +72,7 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 - 서버에 연결하여 **네트워크 전체의 discovery 정보를 전부 수신**한다 (일반 Client는 자기 토픽 관련 정보만 수신).
 - `ros2 topic list` 같은 CLI 도구가 모든 토픽을 표시하려면 필요하다.
 - **서버(로봇)가 없으면 아무것도 볼 수 없다** — 시뮬에서 이 설정이 남아 있으면 CLI 도구가 hang하는 직접 원인.
+- `ROS_DISCOVERY_SERVER`를 unset해도 `ROS_SUPER_CLIENT=True`가 남아 있으면 CLI가 비정상 동작할 수 있다. **두 변수를 함께 unset해야 한다.**
 
 > 검증: [ROS2 Discovery Server 공식 문서](https://docs.ros.org/en/humble/Tutorials/Advanced/Discovery-Server/Discovery-Server.html) — "Super Client is a kind of Client that connects to a Server, from which it receives all the available discovery information" 확인
 
@@ -87,7 +88,11 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 # ~/.bashrc 에서 setup.bash source 이후에 추가
 source /etc/turtlebot4_discovery/setup.bash
 unset ROS_DISCOVERY_SERVER        # 시뮬용: DS(실물 로봇 전용) 비활성화
+unset ROS_SUPER_CLIENT            # DS 없어도 이 값이 남으면 CLI 비정상 동작
+export ROS_DOMAIN_ID=0
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 export ROS_LOCALHOST_ONLY=1       # DDS를 127.0.0.1로 제한
+export LOG=$HOME/ROS2_Jazzy/logs
 ```
 
 **주의**: 이 방법은 **모든 터미널 세션**에 적용된다. 이후 실물 로봇에 연결하려면 해당 터미널에서 수동으로 `export ROS_DISCOVERY_SERVER="<ROBOT_IP>:11811"` 해야 한다.
@@ -118,13 +123,71 @@ env -u ROS_DISCOVERY_SERVER \
   ├─► env | grep ROS_DISCOVERY_SERVER 로 설정 확인
   │         값이 있으면 → Discovery Server 모드가 활성화된 상태
   │
+  ├─► env | grep ROS_SUPER_CLIENT 로 설정 확인
+  │         True이면 → ROS_DISCOVERY_SERVER unset 후에도 CLI 비정상 가능
+  │
   ├─► ping <ROBOT_IP> 로 서버 접근 가능 여부 확인
   │         응답 없으면 → DS에 연결 불가 → 모든 discovery hang
   │
-  └─► 해결: unset ROS_DISCOVERY_SERVER && export ROS_LOCALHOST_ONLY=1
+  ├─► ls /dev/shm/fastrtps_* | wc -l  로 SHM 세그먼트 수 확인
+  │         수백 개 이상이면 → launch 반복 실패로 누적된 상태
+  │         해결: (모든 ROS 프로세스 종료 후) rm -f /dev/shm/fastrtps_*
+  │
+  └─► 해결: unset ROS_DISCOVERY_SERVER && unset ROS_SUPER_CLIENT
+            export ROS_LOCALHOST_ONLY=1
             ros2 daemon stop && ros2 daemon start  (캐시 초기화)
             다시 ros2 topic list 실행
+            ※ daemon 재시작 후에도 안 되면: ros2 topic list --no-daemon
 ```
+
+---
+
+## 추가 트러블슈팅
+
+### FastDDS SHM 세그먼트 누적 문제
+
+launch를 반복 실패시키면 `/dev/shm/fastrtps_*` 세그먼트가 수백~1300개 이상 쌓일 수 있다.
+
+**증상과 영향**:
+- 새 노드가 초기화될 때 FastDDS가 모든 SHM 세그먼트를 탐색하여 초기화 속도가 극히 느려진다.
+- `controller_manager` lock 타임아웃의 간접 원인이 된다 (spawner가 제때 등록되지 못함).
+
+**확인 및 해결**:
+
+```bash
+# 누적 수 확인
+ls /dev/shm/fastrtps_* | wc -l
+
+# 모든 ROS2/Gazebo 프로세스 종료 후 제거
+rm -f /dev/shm/fastrtps_*
+```
+
+> 검증: FastDDS SHM transport 동작 원리 — `/dev/shm/fastrtps_*`는 FastDDS shared memory transport가 생성하는 세그먼트이며, 프로세스가 비정상 종료 시 자동 삭제되지 않고 누적된다.
+
+### `ros2 topic list --no-daemon` 활용
+
+기존 ROS daemon이 `ROS_DISCOVERY_SERVER` 있는 상태로 시작됐을 경우, `ros2 daemon stop && ros2 daemon start`를 해도 환경변수가 새 터미널에 반영되기 전 타이밍 문제가 생길 수 있다.
+
+```bash
+# daemon을 우회하여 직접 DDS에 참가 (현재 셸의 환경변수가 즉시 반영됨)
+ros2 topic list --no-daemon
+```
+
+`--no-daemon` 플래그는 별도 daemon 프로세스 없이 명령 자체가 DDS 네트워크에 직접 참가한다. daemon 캐시 문제를 완전히 우회하는 용도로 유용하다.
+
+### dock/undock이 안 될 때 — `nav2:=true` 누락
+
+**증상**: Gazebo 시뮬에서 dock/undock 명령을 보내도 반응 없음, `docking_server` 노드가 없음.
+
+**원인**: `turtlebot4_gz.launch.py`의 `nav2` 인수 기본값이 `false`이므로, `nav2:=true` 없이 실행하면 `docking_server` 노드가 올라오지 않는다.
+
+**해결**:
+
+```bash
+ros2 launch turtlebot4_gz_bringup turtlebot4_gz.launch.py nav2:=true
+```
+
+또는 방법 B의 `env -u` 방식 사용 시 launch 인수에 `nav2:=true` 추가.
 
 ---
 
@@ -135,6 +198,7 @@ env -u ROS_DISCOVERY_SERVER \
 | 항목 | 실물 로봇 세션 | 시뮬 세션 |
 |------|--------------|-----------|
 | `ROS_DISCOVERY_SERVER` | `<ROBOT_IP>:11811` | unset |
+| `ROS_SUPER_CLIENT` | `True` | unset |
 | `ROS_LOCALHOST_ONLY` | unset (또는 0) | 1 |
 | `ROS_DOMAIN_ID` | 로봇과 동일한 값 | 독립된 값 (예: 0) |
 | DDS discovery 방식 | Discovery Server | Simple Discovery |
