@@ -87,6 +87,7 @@ TA_study/
 | 2026-05-18 | Nav2 / AMCL / TF 트리 — map·odom 프레임 역할, AMCL 동작 원리, Buffer+TransformListener, depth→지도 좌표 파이프라인 | [nav2_amcl_tf_tree.md](concepts/nav2_amcl_tf_tree.md) |
 | 2026-05-18 | Claude Code 활용 패턴 — /init·Plan Mode·서브에이전트 6패턴·API 비용 최적화·실습 사례(자연어 TurtleBot4 네비게이터) | [claude_code_usage_patterns.md](concepts/claude_code_usage_patterns.md) |
 | 2026-05-19 | Gazebo 시뮬에서 Discovery Server 환경변수 충돌 — Simple Discovery / ROS_LOCALHOST_ONLY로 격리하는 방법 | [ros2_gazebo_sim_dds_setup.md](concepts/ros2_gazebo_sim_dds_setup.md) |
+| 2026-05-20 | Notion MCP 연동 설정 — Node.js 설치, Integration 토큰 발급, claude mcp add 등록 절차 | [notion_mcp_setup.md](concepts/notion_mcp_setup.md) |
 
 ---
 
