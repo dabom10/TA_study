@@ -49,6 +49,7 @@ TA_study/
 | 2026-05-18 | software | 멀티로봇 네임스페이스에서 TransformListener가 /tf(전역) 구독 → AMCL의 /robot8/tf map→odom 못 받음, -r /tf:=tf 추가로 해결 | [tf_listener_namespace_mismatch.md](software/tf_listener_namespace_mismatch.md) |
 | 2026-05-18 | env | turtlebot4-simulator 미설치로 Gazebo에 로봇 미표시 + launch 파일명 오류(turtlebot4_gz.launch.py) | [turtlebot4_gz_sim_no_robot.md](env/turtlebot4_gz_sim_no_robot.md) |
 | 2026-05-18 | network | turtlebot4_gz_bringup 실행 후 로봇 미스폰 + ros2 node list 빈 출력 — FastDDS 멀티캐스트 peer discovery 불능 (미해결) | [fastdds_local_discovery_failure.md](network/fastdds_local_discovery_failure.md) |
+| 2026-05-28 | software | ultralytics CPU→GPU 순차 추론 시 `Invalid CUDA 'device=0'` — `device='cpu'`가 `CUDA_VISIBLE_DEVICES=""`로 덮어써 torch CUDA 캐시 락, GPU 먼저 실행으로 해결 | [ultralytics_cpu_gpu_order_cuda_lock.md](software/ultralytics_cpu_gpu_order_cuda_lock.md) |
 
 ---
 
