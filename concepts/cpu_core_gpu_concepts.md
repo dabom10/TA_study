@@ -122,6 +122,42 @@
 
 ---
 
+### 7. 보충: IPC (프로세스 간 통신)
+
+**IPC = Inter-Process Communication.** 프로세스들은 메모리가 **분리**돼 있어서(섹션 2) 그냥 변수로 데이터를 못 주고받는다. 그래서 별도 통로가 필요한데 그게 IPC.
+(반대로 스레드는 메모리를 공유하니 IPC가 필요 없다 — 대신 lock으로 동기화.)
+
+| 방식 | 특징 |
+|------|------|
+| **파이프(Pipe)** | 단방향 바이트 스트림. 익명 파이프는 부모-자식용, FIFO(named pipe)는 무관한 프로세스도 가능 |
+| **메시지 큐(Message Queue)** | 메시지를 큐에 넣고 뺌. 비동기 — 양쪽이 동시에 안 떠 있어도 됨 |
+| **공유 메모리(Shared Memory)** | 같은 물리 메모리를 여러 프로세스 주소공간에 매핑. **복사가 없어 가장 빠름.** 단 동기화는 별도(세마포어) |
+| **소켓(Socket)** | 양방향 채널. 네트워크 너머도 가능(Unix domain socket은 한 호스트 내 빠른 버전) |
+| **세마포어(Semaphore)** | 데이터 전달용이 아니라 **자원 접근 조율(동기화)**용. 공유 메모리 보호에 같이 씀 |
+
+> ROS2의 노드 간 통신(DDS)도 본질적으로 IPC의 한 형태(주로 소켓/공유메모리 기반). 노드 = 보통 별개 프로세스.
+
+> 검증: [GeeksforGeeks — IPC](https://www.geeksforgeeks.org/operating-systems/inter-process-communication-ipc/), [Medium — Understanding IPC](https://mohitdtumce.medium.com/understanding-interprocess-communication-ipc-pipes-message-queues-shared-memory-rpc-902f918fba58) — 일치
+
+---
+
+### 8. 보충: 데드락에 대처하는 4가지 방법
+
+데드락은 발생하면 시스템이 멈추므로, OS/프로그램은 아래 중 하나로 대응한다.
+
+| 방법 | 내용 | 비용 |
+|------|------|------|
+| **예방(Prevention)** | 4조건(섹션 5) 중 하나를 **구조적으로 불가능**하게 만듦. 예: lock을 항상 같은 순서로만 잡아 순환 대기 차단 | 설계 제약이 큼 |
+| **회피(Avoidance)** | 자원 할당 전에 "이걸 주면 안전한가?"를 매번 계산. **뱅커스 알고리즘**이 대표 — 각 프로세스의 최대 요구량을 미리 알아야 하고, 안전 상태(safe state)로 남을 때만 할당 | 요청마다 계산 부담 |
+| **탐지 후 복구(Detection & Recovery)** | 막지 않고 그냥 두다가, 주기적으로 자원 그래프에서 **사이클(순환)을 탐지** → 발견되면 프로세스 강제 종료/롤백 | 평소엔 가볍지만 터지면 비쌈 |
+| **무시(Ostrich)** | 드물면 그냥 무시(재부팅). 일반 OS가 현실적으로 자주 택하는 길 | 거의 0 / 가끔 큰 사고 |
+
+- 실무에서 멀티스레드 코드는 대부분 **예방(lock 순서 고정)**으로 푼다. 뱅커스 알고리즘은 이론·교과서용 비중이 큼.
+
+> 검증: [TutorialsPoint — Deadlock Handling](https://www.tutorialspoint.com/operating_system/os_deadlock_handling.htm), [GeeksforGeeks — Detection & Recovery](https://www.geeksforgeeks.org/operating-systems/deadlock-detection-recovery/), [TutorialsPoint — Banker's Algorithm](https://www.tutorialspoint.com/operating_system/os_deadlock_avoidance_bankers_algorithm.htm) — 일치
+
+---
+
 ## 다른 개념과의 연결
 - [[thread_inline_vs_threaded]] — 이 문서가 "하드웨어(코어)" 레벨이라면, 그쪽은 "소프트웨어 흐름(스레드)" 레벨. 코어 위에 스레드가 올라간다.
 - ROS2 Executor(SingleThreaded / MultiThreaded), 콜백 그룹 → 어떤 콜백을 어느 스레드에 올릴지 결정하는 부분. 메모 14번 "event마다 function을 CPU에 얹는다"가 이것.
