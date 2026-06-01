@@ -58,6 +58,8 @@ OAK-D Pro 측정 정확도 (800P, 75mm baseline 기준):
 
 ### 5. baseline을 늘리면 정확도는? — trade-off
 
+> ⚠️ **baseline은 하드웨어 고정값.** 두 센서가 PCB에 75mm 간격으로 납땜되어 있어 **소프트웨어로 못 바꾼다.** 아래 trade-off는 한 대를 튜닝하는 얘기가 아니라 **카메라 모델을 고를 때**의 설계 선택이다 (근접용 OAK-D SR 2cm vs 범용 OAK-D Pro 7.5cm).
+
 거리 오차를 공식으로 보면 (Z를 d로 미분):
 
 ```
@@ -82,6 +84,31 @@ OAK-D Pro 측정 정확도 (800P, 75mm baseline 기준):
 
 → Luxonis 권고: **측정하려는 거리에 맞춰 baseline을 고른다.** 근접용 OAK-D SR은 baseline을 2cm로 줄여 1m 이내 정밀도를 택함.
 
+### 6. focal length(f)의 영향 — baseline과 뭐가 다른가
+
+`f`와 `B`는 둘 다 정확도 공식 `ΔZ ≈ Z²/(f·B)·Δd`의 분모에 있어 **각각 키우면 정확도가 좋아진다.** 단 성격과 부작용이 다르다.
+
+| | **focal length (f)** | **baseline (B)** |
+|---|---|---|
+| 무엇 | 카메라 **1개**의 속성 (렌즈↔센서 거리) | 카메라 **2개 사이** 거리 |
+| 비유 | 한쪽 눈의 렌즈 배율(줌) | 양쪽 눈 사이 간격 |
+| 정확도 키우는 부작용 | **화각(FOV)이 좁아짐** (좁은 영역만 봄) | **MinZ 멀어짐** (가까운 거 못 봄) |
+
+**focal length의 영향 2가지:**
+1. **화각 결정** — f 길면(망원) 좁고 멀리 자세히, f 짧으면(광각) 넓게.
+2. **depth 정확도** — f 클수록 ΔZ↓ → 원거리 정확도↑. 대신 화각이 좁아지는 trade-off.
+
+> `focal_length_in_pixels`는 **해상도를 바꾸면 스케일**된다(800P→400P 등). 물리 렌즈(mm)는 그대로지만 픽셀 환산값이 달라지는 것 — driver가 현재 해상도 기준으로 자동 처리.
+
+**yaml에 focal length 파라미터는? → 없다.** focal length는 튜닝값이 아니라 **공장 캘리브레이션 측정값**으로, 디바이스 EEPROM에 저장된 값을 driver가 읽어 `camera_info`(fx, fy, cx, cy)로 발행한다. 굳이 바꾸려면(재캘리브레이션 시):
+
+| 방법 | 설명 |
+|------|------|
+| `i_calibration_file` | 커스텀 캘리브레이션 파일 경로 지정 → 디바이스 기본값 대신 사용 |
+| `set_camera_info` 서비스 | 각 이미지 스트림마다 런타임에 camera_info 오버라이드 |
+
+→ yaml에서 만지는 건 해상도·fps·stereo 모드뿐. **f와 B 둘 다 "주어지는 값"이고, 실시간으로 변하는 건 disparity(d) 하나뿐.** (차이: baseline은 물리 구조라 재캘리브레이션으로도 불변, focal length는 캘리브레이션 파일로 보정값 교체 가능)
+
 ## 다른 개념과의 연결
 
 - **Depth/RGB alignment**: 위에서 구한 depth는 스테레오 카메라 좌표계 기준. RGB detection 결과와 거리를 매칭하려면 정렬 필요 → [depth_rgb_alignment.md](depth_rgb_alignment.md)
@@ -99,4 +126,5 @@ OAK-D Pro 측정 정확도 (800P, 75mm baseline 기준):
 > 검증: [Luxonis OAK-D Pro hardware docs](https://docs.luxonis.com/hardware/products/OAK-D%20Pro) — baseline 75mm, 동작 범위 0.8~12m, 거리별 정확도(4m<2%, 4~7m<4%, 7~10m<6%) 일치
 > 검증: [TurtleBot4 User Manual – Features](https://turtlebot.github.io/turtlebot4-user-manual/overview/features.html) — OAK-D Pro, OV9282 스테레오 센서, IR 도트 프로젝터·IR LED 일치
 > 검증: [Luxonis StereoDepth node docs](https://docs.luxonis.com/software/depthai-components/nodes/stereo_depth/) — baseline↑ → 원거리 정확도↑·MinZ↑ trade-off 일치
-> 검증: [Luxonis Configuring stereo depth](https://docs.luxonis.com/hardware/platform/depth/configuring-stereo-depth/) — MinZ=f·B/max_disparity, MaxZ=(B/2)·tan(...), baseline별 MaxZ 수치 일치
+> 검증: [Luxonis Configuring stereo depth](https://docs.luxonis.com/hardware/platform/depth/configuring-stereo-depth/) — MinZ=f·B/max_disparity, MaxZ=(B/2)·tan(...), baseline 고정 하드웨어, focal_length_in_pixels 해상도 스케일 일치
+> 검증: [depthai-ros driver 파라미터 문서](https://docs.luxonis.com/software/ros/depthai-ros/driver/) — focal length 직접 설정 파라미터 없음, `i_calibration_file`/`set_camera_info`로만 오버라이드 가능 일치
