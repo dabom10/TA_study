@@ -119,7 +119,7 @@ TA_study/
 | Software - TurtleBot4 Setup | [software/06_tb4_setup.md](concepts/turtlebot4_manual/software/06_tb4_setup.md) | ⬜ |
 | Software - Create3 | [software/07_create3.md](concepts/turtlebot4_manual/software/07_create3.md) | ⬜ |
 | Software - Sensors | [software/08_sensors.md](concepts/turtlebot4_manual/software/08_sensors.md) | ⬜ |
-| Software - Rviz2 | [software/09_rviz2.md](concepts/turtlebot4_manual/software/09_rviz2.md) | ⬜ |
+| Software - Rviz2 | [software/09_rviz2.md](concepts/turtlebot4_manual/software/09_rviz2.md) | ✅ |
 | Software - Simulation | [software/10_simulation.md](concepts/turtlebot4_manual/software/10_simulation.md) | ⬜ |
 | Mechanical - TurtleBot4 | [mechanical/01_tb4.md](concepts/turtlebot4_manual/mechanical/01_tb4.md) | ⬜ |
 | Mechanical - TurtleBot4 Lite | [mechanical/02_tb4_lite.md](concepts/turtlebot4_manual/mechanical/02_tb4_lite.md) | ⬜ |
@@ -131,7 +131,7 @@ TA_study/
 | Tutorials - First Node (C++) | [tutorials/02_first_node_cpp.md](concepts/turtlebot4_manual/tutorials/02_first_node_cpp.md) | ⬜ |
 | Tutorials - First Node (Python) | [tutorials/03_first_node_py.md](concepts/turtlebot4_manual/tutorials/03_first_node_py.md) | ⬜ |
 | Tutorials - Generating a map | [tutorials/04_mapping.md](concepts/turtlebot4_manual/tutorials/04_mapping.md) | ⬜ |
-| Tutorials - Navigation | [tutorials/05_navigation.md](concepts/turtlebot4_manual/tutorials/05_navigation.md) | ⬜ |
+| Tutorials - Navigation | [tutorials/05_navigation.md](concepts/turtlebot4_manual/tutorials/05_navigation.md) | ✅ |
 | Tutorials - TurtleBot4 Navigator | [tutorials/06_tb4_navigator.md](concepts/turtlebot4_manual/tutorials/06_tb4_navigator.md) | ⬜ |
 | Tutorials - Multiple robots | [tutorials/07_multi_robot.md](concepts/turtlebot4_manual/tutorials/07_multi_robot.md) | ⬜ |
 | Troubleshooting - Diagnostics | [troubleshooting/01_diagnostics.md](concepts/turtlebot4_manual/troubleshooting/01_diagnostics.md) | ⬜ |
