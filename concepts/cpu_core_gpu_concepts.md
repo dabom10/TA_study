@@ -79,6 +79,49 @@
 
 ---
 
+### 5. 락(Lock)과 데드락(Deadlock) (★ 메모 교정 포인트)
+
+스레드들은 메모리를 **공유**하기 때문에(섹션 2), 두 스레드가 같은 데이터에 동시에 접근하면 문제가 생긴다. 그런데 **그 문제의 이름이 데드락은 아니다.**
+
+| 문제 | 정의 | 해결 |
+|------|------|------|
+| **레이스 컨디션 (Race condition)** | 둘 이상이 공유 데이터에 **동시 접근** → 실행 순서에 따라 결과가 달라짐(망가짐) | 내가 쓰는 메모리를 **lock(잠금)** 하고 사용 |
+| **데드락 (Deadlock)** | 서로 상대가 쥔 자원을 기다리며 **둘 다 멈춤**. A가 X를 쥔 채 Y를 기다리고, B가 Y를 쥔 채 X를 기다림 → 영원히 정지 | lock을 **조심해서** 써야 함 (잘못 쓰면 오히려 데드락 발생) |
+
+> 메모 "메모리 동시 access → deadlock, 그래서 lock 필수"는 **순서가 뒤바뀜.**
+> - 동시 access로 데이터가 깨지는 건 **레이스 컨디션** → 이걸 막으려고 **lock**을 건다. (여기까지 메모의 결론 "lock 필수"는 맞음)
+> - **데드락은 오히려 lock을 잘못 써서** 생기는 별개 문제다. lock이 데드락을 막는 게 아니라, lock 사용이 데드락의 전제 조건.
+
+**데드락의 4가지 필요조건 (Coffman conditions — 4개가 동시에 성립해야 발생):**
+1. **상호 배제(Mutual Exclusion)**: 자원을 한 번에 한 명만 점유
+2. **점유와 대기(Hold and Wait)**: 자원을 쥔 채로 다른 자원을 기다림
+3. **비선점(No Preemption)**: 남이 쥔 자원을 강제로 뺏을 수 없음
+4. **순환 대기(Circular Wait)**: 대기가 고리(A→B→A) 형태
+
+→ 이 중 **하나만 깨면 데드락 예방**. (예: 항상 정해진 순서로만 lock을 잡으면 순환 대기가 안 생김)
+
+> 검증: [JMU OpenCSF — Deadlock](https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/Deadlock.html), [DesignGurus — Race Conditions/Deadlocks](https://designgurus.substack.com/p/mastering-multithreading-patterns) — 일치
+
+---
+
+### 6. 스레딩은 "코드"가 아니라 "OS"가 한다
+
+| 옛날 (순차 프로그램) | 객체지향 이후 |
+|----------------------|----------------|
+| 프로그램 = **잘리지 않는 한 덩어리** | 프로그램 = class·method(함수) 단위로 **쪼갤 수 있는 조각들의 모음** |
+| 통째로 실행 | 함수만 / 클래스만 / 전체를 골라 실행 가능 |
+
+- 메모 정리: 객체지향(class·function)으로 짜면 프로그램이 **여러 piece**로 나뉘고, **내 로직이 필요로 하는 조각만** 골라 CPU(코어) 위에 얹어 실행 → 끝나면 내려놓음.
+- ★ 핵심: **threading 기능은 내 코드 안이 아니라 OS(커널) 안에 있다.**
+  - 코드/라이브러리는 "이 함수를 스레드로 돌려줘"라고 **요청**만 한다.
+  - 실제로 **어느 코어의 큐에 넣고, 언제, 얼마나 실행할지 결정(스케줄링)**하는 건 OS 스케줄러.
+  - 각 CPU(코어)마다 실행 대기줄(run queue)이 있고, 같은 스레드가 동시에 두 코어에 올라갈 수는 없다. 코어 간 부하가 쏠리면 OS가 load balancing.
+- 그래서 메모 14번 "event마다 function을 CPU 위에 얹어 실행" = 코드가 스레드를 요청하면 OS가 그걸 노는 코어에 배치하는 그림. 같은 코어에 몰 이유가 없으니 빈 코어로 분산된다.
+
+> 검증: [GeeksforGeeks — Thread Scheduling](https://www.geeksforgeeks.org/thread-scheduling/), [ScienceDirect — Thread Schedule](https://www.sciencedirect.com/topics/computer-science/thread-schedule) — 일치
+
+---
+
 ## 다른 개념과의 연결
 - [[thread_inline_vs_threaded]] — 이 문서가 "하드웨어(코어)" 레벨이라면, 그쪽은 "소프트웨어 흐름(스레드)" 레벨. 코어 위에 스레드가 올라간다.
 - ROS2 Executor(SingleThreaded / MultiThreaded), 콜백 그룹 → 어떤 콜백을 어느 스레드에 올릴지 결정하는 부분. 메모 14번 "event마다 function을 CPU에 얹는다"가 이것.

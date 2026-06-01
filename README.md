@@ -92,7 +92,7 @@ TA_study/
 | 2026-05-29 | Nav2 멀티맵 스위칭 — `load_map` 서비스(Humble/Jazzy 공통), Jazzy `nav2_route` Route Server 멀티플로어 그래프 | [nav2_map_switching.md](concepts/nav2_map_switching.md) |
 | 2026-05-29 | ROS 2 CLI `--ros-args -r` — 인자 스코프 경계와 토픽/네임스페이스 리매핑 규칙 | [ros2_cli_ros_args.md](concepts/ros2_cli_ros_args.md) |
 | 2026-05-29 | `.bashrc` PATH 추가 한 줄 분해 — `echo` 따옴표, `>>` append 리다이렉션, `export` 동작 | [bashrc_export_path_redirection.md](concepts/bashrc_export_path_redirection.md) |
-| 2026-06-01 | CPU/Core/GPU 하드웨어 계층, 메모리 공유 관계, 멀티스레딩/멀티프로세싱/병렬성/동시성 구분 | [cpu_core_gpu_concepts.md](concepts/cpu_core_gpu_concepts.md) |
+| 2026-06-01 | CPU/Core/GPU 하드웨어 계층, 메모리 공유 관계, 멀티스레딩/멀티프로세싱/병렬성/동시성 구분, 락·데드락(레이스 컨디션 vs 데드락), OS 스레드 스케줄링 | [cpu_core_gpu_concepts.md](concepts/cpu_core_gpu_concepts.md) |
 
 ---
 
