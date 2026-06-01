@@ -72,6 +72,40 @@ source /etc/turtlebot4/aliases.bash
 
 ---
 
+## 보충 개념: 데몬과 systemd 서비스
+
+> 검증: ROS2 Humble 공식 문서 *About-Command-Line-Tools* — 일치
+> 검증: TurtleBot4 User Manual *TurtleBot 4 Robot* — 일치
+
+**데몬(daemon)**: 사용자가 직접 띄우지 않아도 백그라운드에서 도는 프로그램. 이름 끝에 보통 `d`가 붙음 (`sshd`, `ntpd`).
+
+**ROS2 데몬** (`turtlebot4-daemon-restart` 대상):
+- ROS 그래프 정보(노드·토픽)를 캐시해 `ros2 topic list` 등 introspection 명령에 빠르게 응답.
+- ROS2는 중앙 서버 없는 **분산 discovery** 방식이라, 매번 전체 탐색하면 느림 → 데몬이 미리 모아둔 정보를 제공.
+- `ros2 topic list` 등을 처음 실행할 때 **자동 생성**됨.
+- 캐시가 stale하면 토픽이 안 뜨거나 죽은 토픽이 남음 → `daemon-restart`로 비움.
+
+**systemd / systemctl** (`turtlebot4-service-restart` 대상):
+- systemd는 리눅스의 init 시스템 = 서비스 관리자(PID 1). 부팅 시 서비스 자동 실행, 죽으면 복구.
+- systemctl은 systemd에게 명령하는 CLI: `start` / `stop` / `restart` / `status`.
+- `turtlebot4.service`는 `robot_upstart`가 로봇 bringup 런치 파일을 등록한 서비스 →
+  전원 켜면 ROS2 노드들이 자동 실행됨. `sudo` 필요.
+- 로그 확인: `sudo journalctl -u turtlebot4 -r`
+- `turtlebot4-setup` → `ROS Setup → Robot Upstart`에서 설치/시작/중지.
+
+### 데몬 vs systemd 서비스
+
+| | ROS2 데몬 | systemd 서비스 (`turtlebot4.service`) |
+|---|-----------|--------------------------------------|
+| 관리 주체 | ros2 CLI (자동) | systemd (OS) |
+| 권한 | 일반 사용자 | `sudo` (root) |
+| 부팅 자동 실행 | ❌ (명령 시 생성) | ✅ |
+| 죽으면 자동 복구 | ❌ | ✅ |
+| 역할 | CLI 조회 속도용 캐시 | 로봇 ROS2 노드 실행 |
+| 재시작 별칭 | `turtlebot4-daemon-restart` | `turtlebot4-service-restart` |
+
+---
+
 ## 나머지 별칭
 
 | 별칭 | 실제 명령 | 용도 |
@@ -87,3 +121,5 @@ source /etc/turtlebot4/aliases.bash
 
 - [turtlebot4_setup/etc/turtlebot4/aliases.bash (humble)](https://github.com/turtlebot/turtlebot4_setup/blob/humble/etc/turtlebot4/aliases.bash)
 - [TurtleBot4 User Manual — Setup](https://turtlebot.github.io/turtlebot4-user-manual/software/turtlebot4_setup.html)
+- [TurtleBot4 User Manual — Robot (turtlebot4.service)](https://turtlebot.github.io/turtlebot4-user-manual/software/turtlebot4_robot.html)
+- [ROS2 Humble — About Command Line Tools (daemon)](https://docs.ros.org/en/humble/Concepts/Basic/About-Command-Line-Tools.html)
