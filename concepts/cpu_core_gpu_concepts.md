@@ -156,6 +156,41 @@
 
 > 검증: [TutorialsPoint — Deadlock Handling](https://www.tutorialspoint.com/operating_system/os_deadlock_handling.htm), [GeeksforGeeks — Detection & Recovery](https://www.geeksforgeeks.org/operating-systems/deadlock-detection-recovery/), [TutorialsPoint — Banker's Algorithm](https://www.tutorialspoint.com/operating_system/os_deadlock_avoidance_bankers_algorithm.htm) — 일치
 
+#### lock 순서 고정은 "코드에서, 개발자가" 한다 (★ 자주 하는 오해)
+
+- **OS가 주는 것**: lock 도구 자체(mutex). "잠가라/풀어라" 기능만.
+- **개발자가 코드에 쓰는 것**: 어떤 lock을 **어떤 순서로** 잡을지. → OS는 순서에 관여 안 함. 그래서 데드락은 보통 OS 버그가 아니라 **내 코드의 버그**.
+
+```python
+import threading
+lock_A = threading.Lock()
+lock_B = threading.Lock()
+
+# ❌ 데드락: 두 스레드가 lock을 잡는 순서가 엇갈림
+def thread1():
+    lock_A.acquire()   # A 먼저
+    lock_B.acquire()   # 그다음 B
+    ...
+def thread2():
+    lock_B.acquire()   # B 먼저  ← 순서 반대!
+    lock_A.acquire()   # 그다음 A → 서로 상대 lock 대기 = 멈춤
+    ...
+
+# ✅ 예방: 모든 스레드가 "항상 A → B" 같은 순서로만 잡음
+def thread1():
+    lock_A.acquire(); lock_B.acquire()   # A → B
+    ...
+def thread2():
+    lock_A.acquire(); lock_B.acquire()   # 여기도 A → B (통일)
+    ...
+```
+
+- "A를 쥔 채 B 대기"와 "B를 쥔 채 A 대기"가 **동시에 생길 수 없게** 되어 ④ 순환 대기가 원천 차단됨.
+- lock이 많으면 객체에 번호(`id`)를 매겨 **항상 작은 번호부터** 잡는 헬퍼로 순서를 강제하기도 함.
+- Python은 `with lock_A, lock_B:` (context manager)로 쓰면 `release()` 누락 실수까지 방지.
+
+> 검증: [Python docs — threading](https://docs.python.org/3/library/threading.html), [GeeksforGeeks — Locking without Deadlocks](https://www.geeksforgeeks.org/python-locking-without-deadlocks/) — 일치
+
 ---
 
 ## 다른 개념과의 연결
