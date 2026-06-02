@@ -97,6 +97,7 @@ TA_study/
 | 2026-06-01 | Batch / Epoch / Iteration 차이, iteration=전체÷batch 관계, YOLO `epochs`·`batch` 인자 | [batch_epoch_iteration.md](concepts/batch_epoch_iteration.md) |
 | 2026-06-01 | TurtleBot4 별칭 — `turtlebot4-source`/`-service-restart`/`-daemon-restart` aliases.bash 매핑 + ROS2 데몬 vs systemd 서비스 개념 | [turtlebot4_aliases.md](concepts/turtlebot4_aliases.md) |
 | 2026-06-02 | TurtleBot4 Navigation 설정(Humble) — localization/nav2/slam.yaml 파라미터 심화: AMCL 파티클 필터, costmap·inflation, DWB critics, NavFn, slam_toolbox 포즈그래프, AMCL vs SLAM 비교 | [nav2_localization_slam_config.md](concepts/nav2_localization_slam_config.md) |
+| 2026-06-02 | Wayland vs Xorg 구조 차이 + NVIDIA Optimus 노트북에서 dGPU 직결 HDMI가 Xorg(PRIME)만 뜨는 이유, `61-gdm.rules` 드라이버 감지 기반 세션 선택 동작 | [wayland_vs_xorg_nvidia_hdmi.md](concepts/wayland_vs_xorg_nvidia_hdmi.md) |
 
 ---
 
