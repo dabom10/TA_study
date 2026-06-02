@@ -98,6 +98,7 @@ TA_study/
 | 2026-06-01 | TurtleBot4 별칭 — `turtlebot4-source`/`-service-restart`/`-daemon-restart` aliases.bash 매핑 + ROS2 데몬 vs systemd 서비스 개념 | [turtlebot4_aliases.md](concepts/turtlebot4_aliases.md) |
 | 2026-06-02 | TurtleBot4 Navigation 설정(Humble) — localization/nav2/slam.yaml 파라미터 심화: AMCL 파티클 필터, costmap·inflation, DWB critics, NavFn, slam_toolbox 포즈그래프, AMCL vs SLAM 비교 | [nav2_localization_slam_config.md](concepts/nav2_localization_slam_config.md) |
 | 2026-06-02 | Wayland vs Xorg 구조 차이 + NVIDIA Optimus 노트북에서 dGPU 직결 HDMI가 Xorg(PRIME)만 뜨는 이유, `61-gdm.rules` 드라이버 감지 기반 세션 선택 동작 | [wayland_vs_xorg_nvidia_hdmi.md](concepts/wayland_vs_xorg_nvidia_hdmi.md) |
+| 2026-06-02 | SLAM 맵 원점(=매핑 시작 위치)·yaml origin·initial pose 개념, RViz 격자 구석 현상, `/map`·`amcl_pose` 발행 주체, `map→odom` 방향이 "부모 하나" 규칙·양방향 조회로 결정되는 이유 | [slam_map_origin_initial_pose.md](concepts/slam_map_origin_initial_pose.md) |
 
 ---
 
