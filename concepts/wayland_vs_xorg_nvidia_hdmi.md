@@ -36,6 +36,24 @@ Xorg와 Wayland는 디스플레이 서버 아키텍처가 다르며, NVIDIA Opti
 - **nomodeset 커널 파라미터** → Wayland 비활성화
 - 특정 Dell SKU 등 일부 기종만 예외적으로 `GDM_PREFER_WAYLAND`
 
+#### 로그인 메뉴에 "Ubuntu on Xorg" 탭이 안 보이는 이유 (중복 숨김)
+세션 `.desktop`은 사실 4개인데 그중 둘이 이름이 같다:
+
+| 파일 | 위치 | 메뉴 이름(`Name=`) |
+|------|------|--------------------|
+| `ubuntu.desktop` | xsessions(Xorg) | **Ubuntu** |
+| `ubuntu-xorg.desktop` | xsessions(Xorg) | Ubuntu on Xorg |
+| `ubuntu.desktop` | wayland-sessions | **Ubuntu** |
+| `ubuntu-wayland.desktop` | wayland-sessions | Ubuntu on Wayland |
+
+"Ubuntu"라는 이름이 Xorg·Wayland 양쪽에 중복 존재한다. GDM은 이 **"Ubuntu"를 기본 세션 하나로 합치고** 선호 서버(`PreferredDisplayServer`)로 띄우며, 기본과 중복되는 명시적 항목은 **메뉴에서 숨긴다.**
+
+- 이 PC는 Xorg가 선호 서버 → 메뉴엔 **"Ubuntu"(=실제 Xorg)** + "Ubuntu on Wayland"만 뜨고, "Ubuntu on Xorg"는 중복이라 숨겨짐.
+- NVIDIA 없는 PC(Wayland 기본) → 반대로 **"Ubuntu"(=Wayland)** + "Ubuntu on Xorg"가 뜸.
+- 실증: `XDG_SESSION_TYPE=x11`, `XDG_SESSION_DESKTOP=ubuntu` → "Ubuntu" 선택 시 Xorg로 뜬다는 것이 확인됨. 로그인 후 `echo $XDG_SESSION_TYPE`(x11=Xorg, wayland=Wayland)로 검증 가능.
+
+> 검증: `/usr/share/{xsessions,wayland-sessions}/*.desktop` `Name=` 필드, 현재 `$XDG_SESSION_TYPE`(로컬) — "Ubuntu" 이름 중복 및 Xorg 동작 확인
+
 즉 "Xorg로 로그인 못 하다가 뭔가 설치 후 reboot하니 됐다"는 것은 → **NVIDIA 독점 드라이버를 설치/활성화**하면서 (1) udev 규칙이 Xorg 세션을 우선/노출시키고, (2) 그제서야 X 서버가 dGPU를 제대로 구동해 세션이 정상 시작된 것으로 해석된다. (nouveau/드라이버 미설치 상태에서는 Xorg 세션이 검은 화면·크래시로 사실상 로그인 불가였을 가능성)
 
 > 미검증: 설치 직전의 정확한 과거 상태(어떤 드라이버였는지)는 재현 불가 — 위는 규칙 기반 추론
