@@ -96,6 +96,7 @@ TA_study/
 | 2026-06-01 | Stereo depth 원리 — 두 카메라 disparity 삼각측량, Z=f·B/d 공식, 거리² 비례 오차, OAK-D Pro baseline 75mm·IR 도트 프로젝터 | [stereo_depth_oakd.md](concepts/stereo_depth_oakd.md) |
 | 2026-06-01 | Batch / Epoch / Iteration 차이, iteration=전체÷batch 관계, YOLO `epochs`·`batch` 인자 | [batch_epoch_iteration.md](concepts/batch_epoch_iteration.md) |
 | 2026-06-01 | TurtleBot4 별칭 — `turtlebot4-source`/`-service-restart`/`-daemon-restart` aliases.bash 매핑 + ROS2 데몬 vs systemd 서비스 개념 | [turtlebot4_aliases.md](concepts/turtlebot4_aliases.md) |
+| 2026-06-02 | TurtleBot4 Navigation 설정(Humble) — localization/nav2/slam.yaml 파라미터 심화: AMCL 파티클 필터, costmap·inflation, DWB critics, NavFn, slam_toolbox 포즈그래프, AMCL vs SLAM 비교 | [nav2_localization_slam_config.md](concepts/nav2_localization_slam_config.md) |
 
 ---
 
