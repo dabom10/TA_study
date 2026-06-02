@@ -47,6 +47,32 @@ odom은 "부팅 때 꽂은 임시 말뚝", base_link는 "바퀴 회전을 합산
 - 바퀴 한 바퀴 = 둘레(2πR)만큼 바닥 이동 → 회전과 거리는 자전거 바퀴처럼 묶여 있어 바로 환산됨.
 - rqt_tf_tree에서 `odom→base_link`는 동적이라 rate가 낮게(예: 21 Hz) 찍히고, static 변환(센서)은 10000처럼 높게 찍힌다.
 
+### ⚠️ 단순화 주의 — 실제 Create3는 "바퀴 단독"이 아니라 다중센서 융합
+
+위 [1]~[3]은 **개념 이해용 단순화(바퀴 회전만)** 다. 실제 TurtleBot4의 `odom→base_link`는 **Create3 베이스가** 발행하며, **바퀴 엔코더 + IMU + 광학 마우스 센서(바닥 옵티컬 플로우)** 를 융합해 추정한다(`/odom` 20 Hz → rqt의 21 Hz가 이것).
+
+| | 위 단순화 | Create3 실제 |
+|---|---|---|
+| 방식 | 추측항법 = 증분 누적 | **똑같이** 추측항법 = 증분 누적 |
+| 증분 Δ 출처 | 바퀴 회전만 | 바퀴 + IMU + 광학 마우스 융합 |
+| 결과 | odom→base_link (drift) | odom→base_link (drift 더 적음) |
+
+- 바뀌는 건 "한 걸음 Δ(Δs, Δθ)를 얼마나 정확히 재느냐"뿐, **누적해서 base_link를 만든다는 구조는 동일.**
+- 각 센서 역할: 바퀴=거리(미끄러지면 거짓 보고), IMU=회전/heading(더 정확), 광학 마우스=실제 미끄러짐·횡방향 감지(slip 보정).
+- 융합해도 여전히 **추측항법 → drift는 느려질 뿐 사라지지 않음 → map 보정 필요**(결론 불변).
+
+> 검증: iRobot Create3 docs — "fuses the reading from its various sensors to produce a dead reckoning estimate"(wheel encoders·IMU·optical mouse), `/odom` 20 Hz — 일치
+
+### 발행 주체 정리
+
+| 다리 | 발행 노드 | 비고 |
+|------|-----------|------|
+| `odom → base_link` (동적) | **Create3 베이스** | 바퀴+IMU+광학 융합 추측항법, 20 Hz |
+| `base_link → 센서` (정적) | **robot_state_publisher** | `robot_description`(URDF) 읽어 fixed→/tf_static·movable→/tf 발행 |
+
+> robot_description(URDF)이 base_link 아래 TF 서브트리 전체의 출처 — 없으면 센서 데이터를 지도 좌표로 못 바꿔 SLAM/Nav2가 무너진다.
+> 검증: robot_state_publisher ROS docs/GitHub — robot_description+joint_states 구독, fixed→/tf_static·movable→/tf — 일치
+
 > 검증: ros2_control diff_drive_controller / DiffBot odometry — 위 kinematic 적분식, odom(부모)→base_link(자식) publish — 일치
 
 ### 정적인 것 vs 동적인 것
@@ -123,7 +149,7 @@ pose.pose       = (x, y, θ)     ← odom에서 본 base_link 좌표
 | 다리 | publisher | 그 노드만 아는 것 |
 |------|-----------|-------------------|
 | base_link → 센서 | robot_state_publisher(URDF) | 고정 기하 (CAD), static |
-| odom → base_link | 주행부(엔코더) | 굴러간 양, drift |
+| odom → base_link | Create3 (바퀴+IMU+광학센서 융합) | 굴러간 양, drift |
 | map → odom | AMCL / slam_toolbox | 라이다·맵 대조 보정값 |
 
 이점: ①독립 실행(주행부만 켜도 odom까지 동작) ②부품 교체 자유(AMCL↔slam_toolbox) ③고장 격리(localization 죽어도 주행은 살아있음).
@@ -167,6 +193,8 @@ root = "그 위로 부모 다리를 아무도 안 그린 프레임". 지금 `map
 ### 출처
 - [REP-105: Coordinate Frames for Mobile Platforms](https://www.ros.org/reps/rep-0105.html)
 - [REP-120: Coordinate Frames for Humanoid Robots](https://www.ros.org/reps/rep-0120.html)
+- [Create® 3 Odometry — iRobot Education](https://iroboteducation.github.io/create3_docs/api/odometry/)
+- [robot_state_publisher — GitHub (ros)](https://github.com/ros/robot_state_publisher)
 - [diff_drive_controller — ros2_control 문서](https://control.ros.org/humble/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html)
 - [Odometry — DiffBot Differential Drive Mobile Robot](https://ros-mobile-robots.com/theory/modeling-control/odometry/)
 - [How to Publish Wheel Odometry Information Over ROS — automaticaddison](https://automaticaddison.com/how-to-publish-wheel-odometry-information-over-ros/)
