@@ -100,6 +100,7 @@ TA_study/
 | 2026-06-02 | Wayland vs Xorg 구조 차이 + NVIDIA Optimus 노트북에서 dGPU 직결 HDMI가 Xorg(PRIME)만 뜨는 이유, `61-gdm.rules` 드라이버 감지 기반 세션 선택 동작 | [wayland_vs_xorg_nvidia_hdmi.md](concepts/wayland_vs_xorg_nvidia_hdmi.md) |
 | 2026-06-02 | SLAM 맵 원점(=매핑 시작 위치)·yaml origin·initial pose 개념, RViz 격자 구석 현상, `/map`·`amcl_pose` 발행 주체, `map→odom` 방향이 "부모 하나" 규칙·양방향 조회로 결정되는 이유 | [slam_map_origin_initial_pose.md](concepts/slam_map_origin_initial_pose.md) |
 | 2026-06-02 | TF 프레임 직관 — odom(부팅 임시 말뚝)·base_link(증분 누적)·map(영구 기준점) 깃발 비유, 차동구동 적분식+실제 Create3 다중센서 융합 추측항법(바퀴+IMU+광학,20Hz), 발행 주체(odom→base_link=Create3 / base_link→센서=robot_state_publisher+robot_description), drift, base_footprint(z=0) 배치 차이, 트리 구조 설계 이유, rqt에서 map 안 보임 진단 | [tf_frames_odometry_intuition.md](concepts/tf_frames_odometry_intuition.md) |
+| 2026-06-04 | Nav2 Costmap 레이어(static/obstacle/voxel/inflation)·필터(keepout/speed/binary)·cost값 0~254 의미·RViz costmap 색상 스킴(검정→파랑→빨강→청록→보라) | [nav2_costmap_layers_filters_rviz.md](concepts/nav2_costmap_layers_filters_rviz.md) |
 
 ---
 
