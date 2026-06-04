@@ -55,6 +55,53 @@ ROS2 코드는 DDS 구현체가 뭔지 신경 쓰지 않음. **RMW(ROS Middlewar
 
 ---
 
+## Onboard vs Offboard 정의 — 실행 위치 기준
+
+TurtleBot4 TUI의 Discovery Server 설정에서 onboard/offboard는 **DS가 어디서 실행되느냐**로 갈린다.
+
+| 구분 | 실행 위치 | 누가 등록되나 |
+|------|-----------|---------------|
+| **Onboard** | 라즈베리파이 **내부**에서 실행 | 그 로봇의 노드들 + **Create3** |
+| **Offboard** | 라즈베리파이 **외부**(User PC 등)에서 실행 | 멀티로봇/외부 노드를 묶는 중앙 서버 |
+
+```
+        ┌──────────── 로봇 ────────────┐
+        │  [Raspberry Pi]              │
+        │   └ Onboard DS (11811) ◄──── │── Create3 (USB-C로 등록)
+        │                              │
+        └──────────────────────────────┘
+                    ▲
+                    │ (Offboard IP 등록 시)
+            [User PC] └ Offboard DS  ← Pi 외부에서 실행
+```
+
+### 핵심 1 — Onboard DS는 항상 켜놔야 함 (Create3 때문)
+
+DS를 설정하면 **라즈베리파이가 Create3에 discovery server 정보를 써넣는다.** 즉 Create3는 Pi의 onboard DS에 등록되는 클라이언트다.
+
+→ PC를 offboard server로 설정하더라도, **Create3가 onboard DS와 통신해야 하므로 라즈베리파이의 onboard server는 계속 떠 있어야 한다.** offboard는 onboard를 대체하는 게 아니라 추가하는 것.
+
+> 검증: [TurtleBot4 Discovery Server 공식 문서](https://turtlebot.github.io/turtlebot4-user-manual/setup/discovery_server.html) — "the Raspberry Pi will also write the discovery server details to the Create® 3", "Onboard Discovery Server: This is the primary server that will connect the onboard robot nodes" 확인
+
+### 핵심 2 — PC를 DS로 설정 == PC가 Offboard Server
+
+PC에서 `fastdds discovery`를 띄우고, 그 PC의 IP를 로봇 TUI의 **Offboard Server IP**에 등록하면 → 로봇의 onboard DS가 그 PC(offboard server)에 연결된다.
+
+즉 **"PC를 discovery server로 설정한다" = "PC를 offboard server로 둔다"** 와 같은 말. 구체적 명령·설정은 아래 [PC 로컬 Discovery Server 추가 (Offboard Server)](#pc-로컬-discovery-server-추가-offboard-server) 섹션 참고.
+
+> 미검증: "PC = offboard server"라는 직접 표현은 공식 문서에 없음 — 단, 공식 문서의 offboard 등록 절차(외부 머신 IP를 Offboard 필드에 입력)와 일치하는 실무적 해석
+
+### 왜 offboard는 초보자 비추천인가
+
+공식 문서는 "로봇이 많아지면 네트워크 과부하"라고만 짧게 언급. 구조상 이유:
+
+- **onboard 전용**: 로봇들이 서로 격리됨. PC만 각 로봇 onboard DS에 super client로 붙으면 됨 → discovery 트래픽 분산
+- **offboard 사용**: 모든 로봇이 중앙 offboard server를 통해 서로를 다 알게 됨 → 로봇 수에 비례해 discovery 트래픽 증가, full-mesh에 가까워져 과부하
+
+→ 로봇 1대를 PC에서 제어하는 일반적 경우엔 offboard 불필요. offboard IP를 비워두면 모든 offboard 설정이 무시됨.
+
+---
+
 ## IP + Port 개념
 
 네트워크에서 특정 프로그램을 찾으려면 IP와 Port 두 가지가 모두 필요하다.
