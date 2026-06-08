@@ -16,6 +16,42 @@ Ubuntu 설치 마법사의 **"Erase disk and install Ubuntu"** 옵션은 이름�
 
 결과적으로 두 OS가 각각 다른 디스크에 공존하고, EFI 부트 매니저에는 두 개의 ubuntu 엔트리가 등록된다. `BootOrder`에서 우선순위가 높은 쪽으로 부팅된다.
 
+### EFI 부트 매니저 / 부트 엔트리 개념
+
+> 검증: `man efibootmgr`, UEFI Specification 2.10 §3.1 (Boot Manager) — 일치
+
+전원을 켜면 메인보드의 **UEFI 펌웨어**가 가장 먼저 실행되고, 그 안의 **부트 매니저** 모듈이 "어느 OS를 띄울지" 결정한다. 옛 BIOS는 "1번 디스크 첫 섹터(MBR) 무조건 실행"이라 단순했지만, UEFI는 여러 OS를 등록해두고 선택할 수 있다.
+
+**부트 엔트리**는 부트 매니저가 관리하는 "OS 부팅 레시피"다. 메인보드의 **NVRAM**(전원 꺼져도 유지되는 작은 메모리)에 저장된다.
+
+```
+Boot0003* ubuntu  HD(1,GPT,...)/File(\EFI\ubuntu\shimx64.efi)
+   ↑       ↑        ↑                      ↑
+ 번호    이름   어느 디스크/파티션          실행할 부팅 파일
+```
+
+각 디스크에는 보통 ~512MB짜리 **EFI System Partition (ESP)** 이 있고, 그 안에 부팅 파일(`shimx64.efi` 등)이 들어있다. Ubuntu를 두 디스크에 따로 설치하면:
+
+- 디스크1의 ESP → `\EFI\ubuntu\shimx64.efi` (22.04용) → 엔트리 `Boot0003`
+- 디스크2의 ESP → `\EFI\ubuntu\shimx64.efi` (24.04용) → 엔트리 `Boot0004`
+
+이름은 둘 다 'ubuntu'지만 가리키는 디스크가 다른 **별개 엔트리**다.
+
+**BootOrder**는 부트 매니저가 시도하는 순서:
+```
+BootOrder: 0003,0004,9999,...
+```
+앞쪽이 우선. `sudo efibootmgr -o 0004,0003,...` 으로 변경하면 다음 부팅부터 적용된다.
+
+| 용어 | 정의 |
+|------|------|
+| 디스크 | 물리 저장소 (SSD/HDD) |
+| EFI System Partition (ESP) | 디스크 안의 작은 부팅 파일 보관 영역 (~512MB, FAT32) |
+| UEFI 펌웨어 | 메인보드 칩에 내장된 부팅 초기화 코드 |
+| 부트 매니저 | 펌웨어 내부의 "OS 선택기" 모듈 |
+| 부트 엔트리 | "X 디스크의 Y 파일을 실행하라"는 메모. NVRAM에 저장 |
+| BootOrder | 엔트리들의 시도 순서 |
+
 ### 상태 진단 커맨드
 
 ```bash
