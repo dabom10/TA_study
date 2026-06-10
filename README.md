@@ -102,6 +102,7 @@ TA_study/
 | 2026-06-02 | TF 프레임 직관 — odom(부팅 임시 말뚝)·base_link(증분 누적)·map(영구 기준점) 깃발 비유, 차동구동 적분식+실제 Create3 다중센서 융합 추측항법(바퀴+IMU+광학,20Hz), 발행 주체(odom→base_link=Create3 / base_link→센서=robot_state_publisher+robot_description), drift, base_footprint(z=0) 배치 차이, 트리 구조 설계 이유, rqt에서 map 안 보임 진단 | [tf_frames_odometry_intuition.md](concepts/tf_frames_odometry_intuition.md) |
 | 2026-06-04 | Nav2 Costmap 레이어(static/obstacle/voxel/inflation)·필터(keepout/speed/binary)·cost값 0~254 의미·RViz costmap 색상 스킴(검정→파랑→빨강→청록→보라) | [nav2_costmap_layers_filters_rviz.md](concepts/nav2_costmap_layers_filters_rviz.md) |
 | 2026-06-08 | NVMe 2개 환경에서 Ubuntu 완전 초기화 후 단독 설치 — Erase disk가 단일 디스크만 비우는 함정, wipefs/sgdisk/efibootmgr로 수동 초기화 절차 | [ubuntu_clean_install_multi_disk.md](concepts/ubuntu_clean_install_multi_disk.md) |
+| 2026-06-10 | 정적 HTML vs 동적 웹페이지 — HTML 자체는 정적, 클라이언트 측(JS/CSR) vs 서버 측(SSR) 렌더링 차이, 식당 비유, 현대 웹의 SSR+CSR 혼합 | [static_vs_dynamic_web.md](concepts/static_vs_dynamic_web.md) |
 
 ---
 
