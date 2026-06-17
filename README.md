@@ -103,6 +103,7 @@ TA_study/
 | 2026-06-04 | Nav2 Costmap 레이어(static/obstacle/voxel/inflation)·필터(keepout/speed/binary)·cost값 0~254 의미·RViz costmap 색상 스킴(검정→파랑→빨강→청록→보라) | [nav2_costmap_layers_filters_rviz.md](concepts/nav2_costmap_layers_filters_rviz.md) |
 | 2026-06-08 | NVMe 2개 환경에서 Ubuntu 완전 초기화 후 단독 설치 — Erase disk가 단일 디스크만 비우는 함정, wipefs/sgdisk/efibootmgr로 수동 초기화 절차 | [ubuntu_clean_install_multi_disk.md](concepts/ubuntu_clean_install_multi_disk.md) |
 | 2026-06-10 | 정적 HTML vs 동적 웹페이지 — HTML 자체는 정적, 클라이언트 측(JS/CSR) vs 서버 측(SSR) 렌더링 차이, 식당 비유, 현대 웹의 SSR+CSR 혼합 | [static_vs_dynamic_web.md](concepts/static_vs_dynamic_web.md) |
+| 2026-06-17 | BRD vs SRD — Why/What vs How, 추상화 수준·작성 시점·독자 차이, 같은 요구사항(예: "1초 알림")이 SRD에서 Wi-Fi 6+엣지 처리로 구체화되는 추적성, AMR 보안 시스템 예시 | [brd_vs_srd.md](concepts/brd_vs_srd.md) |
 
 ---
 
