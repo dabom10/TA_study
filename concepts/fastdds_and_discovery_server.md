@@ -27,17 +27,9 @@ FastDDS = eProsima가 DDS 표준을 구현한 버전. ROS2 Humble에서 별도 �
 
 ## RMW 추상화 레이어
 
-ROS2 코드는 DDS 구현체가 뭔지 신경 쓰지 않음. **RMW(ROS Middleware interface)** 레이어가 중간에서 스위칭.
+ROS2 코드는 DDS 구현체를 직접 부르지 않고 **RMW(ROS MiddleWare)** 인터페이스를 통한다. `RMW_IMPLEMENTATION=rmw_fastrtps_cpp` 환경변수로 어떤 DDS를 쓸지 결정.
 
-```
-[ROS2 노드 코드]
-      ↓
-  [RMW 레이어]  ← 어떤 DDS 쓸지 여기서 결정
-      ↓
-  [FastDDS / CycloneDDS / ...]
-```
-
-`RMW_IMPLEMENTATION=rmw_fastrtps_cpp` 환경변수가 "RMW 레이어에 FastDDS 써라"고 지시.
+> 6층 통신 스택(rclpy/rclcpp → rcl → rmw → implementation → DDS → OS) 상세는 [ros2_communication_stack_layers.md](ros2_communication_stack_layers.md) 참고.
 
 ---
 
@@ -258,7 +250,7 @@ DDS에서 노드들이 서로를 찾는 과정을 **discovery**라고 함.
 
 네트워크에서 패킷을 목적지까지 **어느 경로로 보낼지 결정하는 것**. 집 공유기가 "이 패킷은 인터넷으로, 저 패킷은 프린터로" 분기시키는 게 라우팅.
 
-강의장 AP가 "라우팅보다 격리 역할"인 이유: 원래 AP는 서브넷 간 패킷 전달(라우팅)도 할 수 있지만, 강의장에서는 그보다 **AP별로 TB 그룹을 물리적으로 분리**하는 게 목적.
+멀티로봇 환경에서 AP가 "라우팅보다 격리 역할"을 맡는 이유: 원래 AP는 서브넷 간 패킷 전달(라우팅)도 할 수 있지만, 이 구성에서는 그보다 **AP별로 TB 그룹을 물리적으로 분리**하는 게 목적.
 
 ```
 AP1: TB1, TB2   ←(섞이지 않음)→   AP2: TB3, TB4
@@ -359,6 +351,5 @@ PC에 로컬 DS를 추가해도, 같은 토픽을 구독하는 PC 노드가 여�
 
 ## 다른 개념 파일과의 연결
 
-- FastDDS vs CycloneDDS 선택 이유 (RPi4 성능 한계) → [turtlebot4_lecture_5th_updates.md](turtlebot4_lecture_5th_updates.md)
-- 강의장 네트워크 구성 (방식 1 vs 방식 2) → [classroom_multirobot_network_comparison.md](classroom_multirobot_network_comparison.md)
+- 멀티로봇 네트워크 구성 (방식 1 vs 방식 2) → [classroom_multirobot_network_comparison.md](classroom_multirobot_network_comparison.md)
 - Discovery Server ID / 세미콜론 설정 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)

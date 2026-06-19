@@ -188,7 +188,7 @@ Loop detection 실패는 **2차 결과**다. Loop detection이 성공해도 fron
 
 ## 다른 개념과의 연결
 
-- [SLAM & OGM 기본](slam_lidar_ogm_costmap.md): Loop Detection이 SLAM 프레임워크 내 어디에 위치하는지
+- [SLAM & OGM 기본](slam_concepts.md): Loop Detection이 SLAM 프레임워크 내 어디에 위치하는지
 - Front-end(scan matching)가 쌓은 오차를 Loop Closure가 교정 → 둘은 협력 관계
 - Relocalization(Nav2 AMCL)과 다름: AMCL은 완성된 지도 위에서 위치 추정, loop closure는 지도 생성 중 실시간 오차 교정
 

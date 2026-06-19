@@ -3,11 +3,6 @@
 > `turtlebot4_navigation` 패키지(**Humble**)의 위치추정 · SLAM · 자율주행 설정 총정리.
 > 대상 파일: `config/localization.yaml`, `config/nav2.yaml`, `config/slam.yaml`
 
-> 검증: `origin/humble:turtlebot4_navigation/config/localization.yaml` — 일치 (max/min_particles 2000/500, alpha 0.2, update_min_d/a 0.25/0.2, laser_model_type likelihood_field, recovery_alpha 0.0, tf_broadcast true, free/occupied_thresh 0.25/0.65, use_sim_time True)
-> 검증: `origin/humble:turtlebot4_navigation/config/nav2.yaml` — 일치 (max_vel_x 0.26, max_vel_theta 1.0, sim_time 1.7, vx/vtheta_samples 20, PathDist/PathAlign/RotateToGoal.scale 32, GoalDist/GoalAlign.scale 24, BaseObstacle.scale 0.02, inflation_radius 0.45, cost_scaling_factor 4.0, robot_radius 0.175, local 3×3m, update_freq global 1.0/local 5.0, xy_goal_tolerance 0.25, progress_checker 0.5m/10s, NavfnPlanner use_astar false)
-> 검증: `origin/humble:turtlebot4_navigation/config/slam.yaml` — 일치 (solver CeresSolver, mode mapping, resolution 0.05, max_laser_range 12.0, minimum_travel_distance/heading 0.0, use_scan_matching true, do_loop_closing true, loop_match_minimum_response_fine 0.45)
-> 검증: `origin/humble:turtlebot4_navigation/launch/slam.launch.py` — 일치 (`sync` 인자 default_value='true' → sync_slam_toolbox_node가 기본)
-
 > 관련 개념 파일(중복 작성 대신 링크):
 > [[nav2_amcl_tf_tree]] — map·odom·base_link TF 트리, AMCL의 `map→odom` 발행 / [[slam_concepts]] — 2D LiDAR SLAM 프레임워크, OGM vs Costmap / [[loop_detection_and_closure]] — Loop Detection vs Closure 구분 / [[nav2_map_switching]] — 런타임 멀티맵 교체(`load_map`)
 

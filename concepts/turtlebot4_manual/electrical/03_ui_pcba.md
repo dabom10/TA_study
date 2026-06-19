@@ -59,7 +59,7 @@ Discovery Server 구성에서는 Create3가 WiFi에 직접 연결하지 않으�
 - Simple Discovery: COMMS LED on이어야 정상
 - Discovery Server: COMMS LED off가 정상
 
-→ 자세한 내용: [turtlebot4_lecture_5th_updates.md](../../turtlebot4_lecture_5th_updates.md)
+→ Humble vs Jazzy Create3 ↔ RPi 연결 변화: [humble_vs_jazzy_fastdds.md](../../humble_vs_jazzy_fastdds.md) — TurtleBot4 아키텍처 변화 섹션
 
 ---
 
@@ -92,6 +92,5 @@ ros2 topic pub /hmi/led turtlebot4_msgs/msg/UserLed ...
 
 ## 다른 섹션과의 연결
 
-- Create3 ↔ RPi 통신 구조 → [turtlebot4_lecture_5th_updates.md](../../turtlebot4_lecture_5th_updates.md)
-- PCBA 하드웨어 핀아웃 → [electrical/03_ui_pcba.md](electrical/03_ui_pcba.md)
+- Humble vs Jazzy Create3 ↔ RPi 연결 변화 → [humble_vs_jazzy_fastdds.md](../../humble_vs_jazzy_fastdds.md)
 - WiFi/네트워크 설정 → [turtlebot4_single_robot_network.md](../../turtlebot4_single_robot_network.md)

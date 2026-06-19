@@ -1,15 +1,14 @@
-# 강의장 멀티로봇 네트워크 구성 방식 비교
+# 멀티로봇 네트워크 구성 방식 비교 (Onboard DS vs Server PC DS)
 
 ## 한 줄 요약
 
-AP 1개당 TurtleBot 2대 + PC 4대로 구성되는 멀티로봇 환경에서, Discovery Server를 각 TurtleBot에 두는 방식(방식 1)과 별도 Server PC에 집중시키는 방식(방식 2)의 차이.
+AP 1개당 TurtleBot 2대 + PC 여러 대로 구성되는 멀티로봇 환경에서, Discovery Server를 각 TurtleBot에 두는 방식(방식 1)과 별도 Server PC에 집중시키는 방식(방식 2)의 차이.
 
 ---
 
 ## 전제 조건
 
-- 강의장 TurtleBot 총 6대 → AP 3개 운영 (AP당 TurtleBot 2대)
-- 2대씩 멀티로봇 팀 구성
+- AP당 TurtleBot 2대씩 그룹화 (예: AP1 → TB1·TB2, AP2 → TB3·TB4)
 - FastDDS Discovery Server 사용 (Simple Discovery 브로드캐스트 방지)
 - AP의 역할: 라우팅보다 **TurtleBot 그룹 격리** 목적
 
@@ -17,7 +16,6 @@ AP 1개당 TurtleBot 2대 + PC 4대로 구성되는 멀티로봇 환경에서, D
 |----|-----------|
 | AP1 | TB1, TB2 |
 | AP2 | TB3, TB4 |
-| AP3 | TB5, TB6 |
 
 ---
 
@@ -180,18 +178,18 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 
 ---
 
-## 전체 강의장 그림 (방식 2 기준)
+## 다중 AP 확장 그림 (방식 2 기준)
 
 ```
-       [AP1]              [AP2]              [AP3]
-      /     \            /     \            /     \
-   [TB1]  [TB2]       [TB3]  [TB4]       [TB5]  [TB6]
+       [AP1]              [AP2]
+      /     \            /     \
+   [TB1]  [TB2]       [TB3]  [TB4]
 
-  [Server PC1 (DS)]  [Server PC2 (DS)]  [Server PC3 (DS)]
-   /  \   / | \ \     /  \   / | \ \     /  \   / | \ \
- TB1 TB2 PC1~PC4    TB3 TB4 PC5~PC8    TB5 TB6 PC9~PC12
+  [Server PC1 (DS)]  [Server PC2 (DS)]
+   /  \   / | \ \     /  \   / | \ \
+ TB1 TB2 PC1~PCn    TB3 TB4 PCn+1~
 
-  AP 경계 = 토픽 격리 경계 (AP1 ↔ AP2 ↔ AP3 는 서로 통신 안 함)
+  AP 경계 = 토픽 격리 경계 (AP1 ↔ AP2 는 서로 통신 안 함)
 ```
 
 ---
@@ -201,7 +199,7 @@ SPOF               없음 (DS 분산)                있음 (Server PC)
 - Discovery Server 기본 개념, Domain ID vs Server ID, 세미콜론 규칙 → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
 - 싱글로봇 TUI 설정 절차 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)
 - TurtleBot4 TUI Offboard Server IP 항목 → 방식 2 Server PC IP를 여기에 입력
-- FastDDS vs CycloneDDS 선택 → [turtlebot4_lecture_5th_updates.md](turtlebot4_lecture_5th_updates.md)
+- FastDDS vs CycloneDDS 선택 → [humble_vs_jazzy_fastdds.md](humble_vs_jazzy_fastdds.md)
 
 ---
 

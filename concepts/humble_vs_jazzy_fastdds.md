@@ -166,4 +166,3 @@ Jazzy에서 `ROS_SUPER_CLIENT`를 인터랙티브 터미널에서만 True로 설
 
 - FastDDS Discovery Server 개념, Server ID, ROS_SUPER_CLIENT → [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md)
 - TurtleBot4 싱글로봇 네트워크 설정 → [turtlebot4_single_robot_network.md](turtlebot4_single_robot_network.md)
-- Create3 ↔ RPi 물리 연결(Ethernet over USB) → [turtlebot4_lecture_5th_updates.md](turtlebot4_lecture_5th_updates.md)

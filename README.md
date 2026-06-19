@@ -65,14 +65,13 @@ TA_study/
 | 2026-04-02 | ROS2 통신 개념: Topic/Service/Action, QoS, 리매핑, Bag | [ros2_communication_concepts.md](concepts/ros2_communication_concepts.md) |
 | 2026-04-03 | 두산 M0609 + OnRobot RG2 로봇팔 기초 개념 | [doosan_m0609_rg2_manipulation.md](concepts/doosan_m0609_rg2_manipulation.md) |
 | 2026-04-03 | 시리얼 통신 종류 비교 (UART, SPI, I2C, USB, CAN) | [serial_communication_types.md](concepts/serial_communication_types.md) |
-| 2026-04-03 | TurtleBot4 강의 변경사항, FastDDS/CycloneDDS, Create3 comm LED | [turtlebot4_lecture_5th_updates.md](concepts/turtlebot4_lecture_5th_updates.md) |
 | 2026-04-06 | TurtleBot4 전체 토픽 상세 정리 | [turtlebot4_topic_overview.md](concepts/turtlebot4_topic_overview.md) |
 | 2026-04-06 | SLAM 개념: LiDAR Framework, OGM/Costmap, slam_toolbox 노드-토픽 구조 | [slam_concepts.md](concepts/slam_concepts.md) |
 | 2026-04-07 | Loop Detection vs Loop Closure, Scan Degeneracy, Pose Graph 최적화 | [loop_detection_and_closure.md](concepts/loop_detection_and_closure.md) |
 | 2026-04-08 | TurtleBot4 싱글로봇 네트워크 설정 (Discovery Server, TUI, setup.bash) | [turtlebot4_single_robot_network.md](concepts/turtlebot4_single_robot_network.md) |
 | 2026-04-10 | apt update vs upgrade 차이 정리 | [apt_update_vs_upgrade.md](concepts/apt_update_vs_upgrade.md) |
 | 2026-04-10 | FastDDS, DDS 표준, RMW 레이어, Discovery Server vs Simple Discovery, 라우팅 개념, PC 로컬 DS 추가 설정 | [fastdds_and_discovery_server.md](concepts/fastdds_and_discovery_server.md) |
-| 2026-04-10 | 강의장 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
+| 2026-04-10 | 멀티로봇 네트워크 구성 비교 (Onboard DS vs Server PC DS) | [classroom_multirobot_network_comparison.md](concepts/classroom_multirobot_network_comparison.md) |
 | 2026-04-10 | 가상환경 개념, Anaconda vs Docker 격리 수준 비교 | [virtual_environment_concepts.md](concepts/virtual_environment_concepts.md) |
 | 2026-04-13 | 오픈소스 라이선스 종류 비교 (Apache-2.0, MIT, BSD, GPL, LGPL) | [open_source_licenses.md](concepts/open_source_licenses.md) |
 | 2026-04-14 | git push 거부·충돌 상황별 해결법 (merge/rebase/force-with-lease) | [git_push_conflict_resolution.md](concepts/git_push_conflict_resolution.md) |
@@ -103,6 +102,7 @@ TA_study/
 | 2026-06-04 | Nav2 Costmap 레이어(static/obstacle/voxel/inflation)·필터(keepout/speed/binary)·cost값 0~254 의미·RViz costmap 색상 스킴(검정→파랑→빨강→청록→보라) | [nav2_costmap_layers_filters_rviz.md](concepts/nav2_costmap_layers_filters_rviz.md) |
 | 2026-06-08 | NVMe 2개 환경에서 Ubuntu 완전 초기화 후 단독 설치 — Erase disk가 단일 디스크만 비우는 함정, wipefs/sgdisk/efibootmgr로 수동 초기화 절차 | [ubuntu_clean_install_multi_disk.md](concepts/ubuntu_clean_install_multi_disk.md) |
 | 2026-06-10 | 정적 HTML vs 동적 웹페이지 — HTML 자체는 정적, 클라이언트 측(JS/CSR) vs 서버 측(SSR) 렌더링 차이, 식당 비유, 현대 웹의 SSR+CSR 혼합 | [static_vs_dynamic_web.md](concepts/static_vs_dynamic_web.md) |
+| 2026-06-19 | ROS2 통신 계층 6단(rclpy/rclcpp → rcl → rmw → rmw implementation → DDS → OS) 구조, rmw 인터페이스 vs implementation vs DDS 구분, `RMW_IMPLEMENTATION` 환경변수로 통역기+DDS 교체, 콜백 실행 흐름과 `rclpy.spin()` 역할 | [ros2_communication_stack_layers.md](concepts/ros2_communication_stack_layers.md) |
 | 2026-06-17 | BRD vs SRD — Why/What vs How, 추상화 수준·작성 시점·독자 차이, 같은 요구사항(예: "1초 알림")이 SRD에서 Wi-Fi 6+엣지 처리로 구체화되는 추적성, AMR 보안 시스템 예시 | [brd_vs_srd.md](concepts/brd_vs_srd.md) |
 
 ---

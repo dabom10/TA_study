@@ -32,33 +32,15 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
 ## 핵심 개념
 
-### 1. Discovery Server 모드 — 중앙 서버 등록 방식
+### 1. Discovery Server vs Simple Discovery (모드 비교)
 
-```
-노드 A 켜짐 ──► Discovery Server(IP:11811)에 endpoint 등록
-              ◄── "B 노드도 같은 토픽 써, 연결해" 라고 서버가 알려줌
-              ──► B와 직접 연결 (데이터는 DS를 거치지 않음)
-```
+- **Discovery Server 모드**: FastDDS가 중앙 서버(`ROS_DISCOVERY_SERVER="<IP>:11811"`)에 모든 endpoint를 등록. 서버가 없으면 discovery 불가.
+- **Simple Discovery 모드**: 별도 서버 없이 멀티캐스트/loopback으로 직접 peer 탐색. 같은 PC 내 시뮬용에 적합.
+- `ROS_DISCOVERY_SERVER`가 설정되어 있으면 Simple Discovery로 자동 전환되지 않음 → 시뮬에서는 unset 필요.
 
-- FastDDS가 중앙 서버에 **모든 endpoint를 등록**한다.
-- 서버가 없으면 discovery 자체가 불가 → 노드들이 서로를 볼 수 없다.
-- `ROS_DISCOVERY_SERVER="<ROBOT_IP>:11811"` 설정 시 그 IP의 서버로 연결을 시도한다.
-- 로봇 보드(Raspberry Pi)에 FastDDS Discovery Server가 실행 중이어야만 동작한다.
+> 두 모드의 원리·세미콜론 규칙·Super Client 등 상세는 [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md).
 
-> 검증: [FastDDS Discovery Server 공식 문서](https://fast-dds.docs.eprosima.com/en/latest/fastdds/discovery/discovery_server.html) — "all Participants must connect to a server in the network" 확인
-
-### 2. Simple Discovery 모드 — 직접 peer 탐색
-
-```
-노드 A 켜짐 ──► 멀티캐스트 브로드캐스트 "나 켜졌어!"
-              ◄── 같은 네트워크의 모든 노드가 수신하여 직접 연결
-```
-
-- 별도 서버 없이 멀티캐스트/유니캐스트로 **직접 peer를 탐색**한다.
-- 같은 PC 내 노드끼리는 loopback 또는 로컬 멀티캐스트로 탐색 가능 → 시뮬용으로 적합.
-- 단, `ROS_DISCOVERY_SERVER`가 설정되어 있으면 Simple Discovery로 전환되지 않는다.
-
-### 3. `ROS_LOCALHOST_ONLY=1`
+### 2. `ROS_LOCALHOST_ONLY=1`
 
 - FastDDS 통신을 `127.0.0.1`(loopback) 인터페이스로만 제한한다.
 - 같은 PC 내 노드끼리만 통신하므로 외부 네트워크 트래픽이 완전히 차단된다.
@@ -66,15 +48,11 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
 > 검증: [ROS2 환경변수 공식 문서](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Domain-ID.html) — `ROS_LOCALHOST_ONLY` → DDS를 localhost 인터페이스로만 제한 확인
 
-### 4. `ROS_SUPER_CLIENT=True`
+### 3. `ROS_SUPER_CLIENT=True` — 시뮬에서 반드시 unset
 
-- Discovery Server 전용 클라이언트 모드.
-- 서버에 연결하여 **네트워크 전체의 discovery 정보를 전부 수신**한다 (일반 Client는 자기 토픽 관련 정보만 수신).
-- `ros2 topic list` 같은 CLI 도구가 모든 토픽을 표시하려면 필요하다.
-- **서버(로봇)가 없으면 아무것도 볼 수 없다** — 시뮬에서 이 설정이 남아 있으면 CLI 도구가 hang하는 직접 원인.
-- `ROS_DISCOVERY_SERVER`를 unset해도 `ROS_SUPER_CLIENT=True`가 남아 있으면 CLI가 비정상 동작할 수 있다. **두 변수를 함께 unset해야 한다.**
+Discovery Server 전용 클라이언트 모드. 서버(로봇)가 없으면 CLI 도구가 hang한다. `ROS_DISCOVERY_SERVER`를 unset해도 `ROS_SUPER_CLIENT=True`가 남으면 CLI 비정상 → **두 변수를 함께 unset.**
 
-> 검증: [ROS2 Discovery Server 공식 문서](https://docs.ros.org/en/humble/Tutorials/Advanced/Discovery-Server/Discovery-Server.html) — "Super Client is a kind of Client that connects to a Server, from which it receives all the available discovery information" 확인
+> Super Client 일반 개념은 [fastdds_and_discovery_server.md](fastdds_and_discovery_server.md) — Discovery Server / Client / Super Client 섹션.
 
 ---
 

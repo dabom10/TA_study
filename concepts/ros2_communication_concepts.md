@@ -131,37 +131,12 @@ float32 distance_traveled        # feedback
 
 ## 토픽 리매핑 (`--ros-args -r`)
 
-```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/robot1/cmd_vel
-```
+소스코드 수정 없이 토픽 이름을 실행 시점에 바꾸는 ROS2 표준 인자. CLI 옵션·`__ns`/`__node` 리매핑·launch 파일 사용법은 [ros2_cli_ros_args.md](ros2_cli_ros_args.md)에 정리.
 
-| 부분 | 의미 |
-|------|------|
-| `--ros-args` | 이후는 ROS2 전용 인자임을 선언 |
-| `-r /cmd_vel:=/robot1/cmd_vel` | 토픽 리매핑 |
-| `-p param:=value` | 파라미터 설정 |
-
-소스코드 안 바꾸고 토픽 이름만 바꿔치기하는 것.
-
-```
-기본:  teleop → /cmd_vel          → 로봇이 안 들음 ❌
-리매핑: teleop → /robot1/cmd_vel  → 로봇이 들음 ✓
-```
-
-### 버전별 차이
-
-| ROS2 버전 | 방식 |
-|-----------|------|
-| Dashing, Eloquent | `--remap /cmd_vel:=/robot1/cmd_vel` |
-| Foxy 이후 (현재) | `--ros-args -r /cmd_vel:=/robot1/cmd_vel` |
-
-launch 파일에서는 `--ros-args` 없이 `remappings` 인자로 씀:
+launch 파일에서는 `--ros-args` 없이 `remappings`로 씀:
 ```python
-Node(
-    package='teleop_twist_keyboard',
-    executable='teleop_twist_keyboard',
-    remappings=[('/cmd_vel', '/robot1/cmd_vel')]
-)
+Node(package='teleop_twist_keyboard', executable='teleop_twist_keyboard',
+     remappings=[('/cmd_vel', '/robot1/cmd_vel')])
 ```
 
 ---
