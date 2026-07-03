@@ -104,6 +104,7 @@ TA_study/
 | 2026-06-10 | 정적 HTML vs 동적 웹페이지 — HTML 자체는 정적, 클라이언트 측(JS/CSR) vs 서버 측(SSR) 렌더링 차이, 식당 비유, 현대 웹의 SSR+CSR 혼합 | [static_vs_dynamic_web.md](concepts/static_vs_dynamic_web.md) |
 | 2026-06-19 | ROS2 통신 계층 6단(rclpy/rclcpp → rcl → rmw → rmw implementation → DDS → OS) 구조, rmw 인터페이스 vs implementation vs DDS 구분, `RMW_IMPLEMENTATION` 환경변수로 통역기+DDS 교체, 콜백 실행 흐름과 `rclpy.spin()` 역할 | [ros2_communication_stack_layers.md](concepts/ros2_communication_stack_layers.md) |
 | 2026-06-17 | BRD vs SRD — Why/What vs How, 추상화 수준·작성 시점·독자 차이, 같은 요구사항(예: "1초 알림")이 SRD에서 Wi-Fi 6+엣지 처리로 구체화되는 추적성, AMR 보안 시스템 예시 | [brd_vs_srd.md](concepts/brd_vs_srd.md) |
+| 2026-07-03 | Linux 프로세스 관리 — `ps -ef`/`pkill -f`/시그널(INT/TERM/KILL) 개념, 좀비 프로세스 진단·부모 통한 회수, ROS2 nav2/localization launch 잔존 프로세스 정리 절차 | [linux_process_management_ps_pkill.md](concepts/linux_process_management_ps_pkill.md) |
 
 ---
 
